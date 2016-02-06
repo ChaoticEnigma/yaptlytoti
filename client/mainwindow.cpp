@@ -5,13 +5,16 @@ MainWindow::MainWindow(Client *client) : client(client){
     textEdit = new QTextEdit;
     setCentralWidget(textEdit);
 
+    setStyleSheet(
+        "QMainWindow::separator { background: rgb(200, 200, 200); width: 2px; height: 2px; }");
+
     createActions();
     createMenus();
-    createToolBars();
+    //createToolBars();
     createStatusBar();
     createDockWindows();
 
-    setWindowTitle(tr("Dock Widgets"));
+    setWindowTitle(tr("Yet Another Program that Lets You Talk on the Internet (Yap)"));
 
     newLetter();
     setUnifiedTitleAndToolBarOnMac(true);
@@ -208,21 +211,57 @@ void MainWindow::createStatusBar(){
 }
 
 void MainWindow::createDockWindows(){
-    QDockWidget *dock = new QDockWidget(tr("Customers"), this);
+
+    float h = (float)this->height();
+
+    this->setCorner(Qt::TopLeftCorner,Qt::LeftDockWidgetArea);
+
+    QDockWidget* dock = new QDockWidget(tr("Text Channels"), this);
     dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    customerList = new QListWidget(dock);
-    customerList->addItems(QStringList()
-            << "John Doe, Harmony Enterprises, 12 Lakeside, Ambleton"
-            << "Jane Doe, Memorabilia, 23 Watersedge, Beaton"
-            << "Tammy Shea, Tiblanka, 38 Sea Views, Carlton"
-            << "Tim Sheen, Caraba Gifts, 48 Ocean Way, Deal"
-            << "Sol Harvey, Chicos Coffee, 53 New Springs, Eccleston"
-            << "Sally Hobart, Tiroli Tea, 67 Long River, Fedula");
-    dock->setWidget(customerList);
-    addDockWidget(Qt::RightDockWidgetArea, dock);
+
+    QWidget* widg = new QWidget(dock); //Placeholder
+    dock->setWidget(widg);
+
+    addDockWidget(Qt::LeftDockWidgetArea, dock);
     viewMenu->addAction(dock->toggleViewAction());
 
-    dock = new QDockWidget(tr("Paragraphs"), this);
+
+    dock = new QDockWidget(tr("Voice Channels"), this);
+    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+
+    widg = new QWidget(dock); //Placeholder
+    dock->setWidget(widg);
+
+    addDockWidget(Qt::LeftDockWidgetArea, dock);
+    viewMenu->addAction(dock->toggleViewAction());
+
+
+    dock = new QDockWidget(this);
+    dock->setAllowedAreas(Qt::LeftDockWidgetArea);
+
+    QWidget* titleWidget = new QWidget(this);
+    dock->setTitleBarWidget( titleWidget ); /* Trick to hide titlebar */
+
+    widg = new QWidget(dock); //Placeholder
+    dock->setWidget(widg);
+
+    dock->setFixedHeight((int)(.25*h));
+    addDockWidget(Qt::LeftDockWidgetArea, dock);
+
+    dock = new QDockWidget(this);
+    dock->setAllowedAreas(Qt::TopDockWidgetArea);
+
+    titleWidget = new QWidget(this);
+    dock->setTitleBarWidget( titleWidget ); /* Trick to hide titlebar */
+
+    widg = new QWidget(dock); //Placeholder
+    dock->setWidget(widg);
+
+    dock->setFixedHeight((int)(.15*h));
+    addDockWidget(Qt::TopDockWidgetArea, dock);
+
+
+   /* dock = new QDockWidget(tr("Paragraphs"), this);
     paragraphsList = new QListWidget(dock);
     paragraphsList->addItems(QStringList()
             << "Thank you for your payment which we have received today."
@@ -244,10 +283,10 @@ void MainWindow::createDockWindows(){
                "buy more items, or should we return the excess to you?");
     dock->setWidget(paragraphsList);
     addDockWidget(Qt::BottomDockWidgetArea, dock);
-    viewMenu->addAction(dock->toggleViewAction());
+    viewMenu->addAction(dock->toggleViewAction());*/
 
-    connect(customerList, SIGNAL(currentTextChanged(QString)),
+    /*connect(customerList, SIGNAL(currentTextChanged(QString)),
             this, SLOT(insertCustomer(QString)));
     connect(paragraphsList, SIGNAL(currentTextChanged(QString)),
-            this, SLOT(addParagraph(QString)));
+            this, SLOT(addParagraph(QString)));*/
 }
