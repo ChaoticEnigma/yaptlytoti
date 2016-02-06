@@ -49,12 +49,19 @@ html
                         button.btn.btn-default(data-dismiss='modal') Close
 
         #container
+
             #pane-left
                 #channels
                     #channel-chat
                         p Chat channels
+                        ul
+                            li: a(href='#', data-id='c1') chat channel 1
+                            li: a(href='#', data-id='c2') chat channel 2
                     #channel-voice
                         p Voice channels
+                        ul
+                            li: a(href='#', data-id='v1') voice channel 1
+                            li: a(href='#', data-id='v2') voice channel 2
                 #pane-user
                     #user-picture
                     #user-name
@@ -69,21 +76,26 @@ html
                         #user-settings
                             button#server-settings.btn.btn-default(title='Edit user settings', data-toggle='modal', data-target='#modal-user-settings')
                                 i.fa.fa-fw.fa-gear
+
             #pane-right
                 #server-header
-                    #server-left-pane
-                        #server-title
-                            p Server title
-                        #server-description
-                            p Server description
-                        #server-icon
-                    #server-right-pane
-                        button#server-settings.btn.btn-default(title='Edit server settings', data-toggle='modal', data-target='#modal-server-settings')
-                            i.fa.fa-fw.fa-gear
-                        button#server-info.btn.btn-default(title='View server information', data-toggle='modal', data-target='#modal-server-info')
-                            i.fa.fa-fw.fa-info-circle
-                        #server-icon
-                    #server-tabs
+                    #server-top
+                        #server-left-pane
+                            #server-title
+                                p Server title
+                            #server-description
+                                p Server description
+                            #server-icon
+                        #server-right-pane
+                            button#server-settings.btn.btn-default(title='Edit server settings', data-toggle='modal', data-target='#modal-server-settings')
+                                i.fa.fa-fw.fa-gear
+                            button#server-info.btn.btn-default(title='View server information', data-toggle='modal', data-target='#modal-server-info')
+                                i.fa.fa-fw.fa-info-circle
+                            #server-icon
+                    #server-bottom
+                        ul#server-tabs.nav.nav-tabs
+                            li.active: a(href='#', data-id='s1') Server 1
+                            li: a(href='#', data-id='s2') Server 2
                 #chat
                     #chat-text
                         #channel-name-current.text-center

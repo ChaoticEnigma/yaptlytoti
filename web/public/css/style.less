@@ -20,11 +20,13 @@ html {
         #channel-chat {
             flex: 1;
             display: flex;
+            flex-direction: column;
         }
 
         #channel-voice {
             flex: 1;
             display: flex;
+            flex-direction: column;
         }
     }
 
@@ -41,16 +43,21 @@ html {
 
     #server-header {
         display: flex;
+        flex-direction: column;
 
-        #server-left-pane {
-            flex: 3;
-        }
-
-        #server-right-pane {
-            flex: 1;
+        #server-top {
             display: flex;
-            align-items: center;
-            justify-content: space-around;
+
+            #server-left-pane {
+                flex: 3;
+            }
+
+            #server-right-pane {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+            }
         }
     }
 
