@@ -13,24 +13,33 @@ SET(CMAKE_AUTOMOC ON)
 FIND_PACKAGE(Qt5Widgets 5.0 REQUIRED)
 
 SET(yaptlytoti_HEADERS ### =================== HEADERS =================== ###
-    main.h
-    mainwindow.h
-    mainworker.h
+    client/main.h
+    client/mainwindow.h
+    client/mainworker.h
 )
 SET(yaptlytoti_SOURCES ### =================== SOURCES =================== ###
-    main.cpp
-    mainwindow.cpp
-    mainwindowslots.cpp
-    mainworker.cpp
+    client/main.cpp
+    client/mainwindow.cpp
+    client/mainwindowslots.cpp
+    client/mainworker.cpp
 )
 SET(yaptlytoti_FORMS ### =================== FORMS =================== ###
-    mainwindow.ui
+    client/mainwindow.ui
+)
+SET(yaptlytoti_FILES ### =================== FILES =================== ###
+    LICENSE
+    README
 )
 
 ### =================== CONFIG =================== ###
 
+ADD_CUSTOM_TARGET(dummy SOURCES
+    ${yaptlytoti_FILES}
+)
+
 INCLUDE_DIRECTORIES(
     ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/client
     ${CMAKE_BINARY_DIR}
     #${LibChaos_INCLUDE}
     ${Qt5Widgets_INCLUDE_DIRS}
