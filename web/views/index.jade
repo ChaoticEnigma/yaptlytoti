@@ -1,0 +1,17 @@
+doctype html
+html
+    head
+        title #{pack.name}
+        meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        link(rel='icon', href='/img/favicon.png', type='image/x-icon')
+        link(rel='shortcut icon', href='/img/favicon.png', type='image/x-icon')
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
+        link(rel='stylesheet', href='/css/style.css')
+        link#theme(rel='stylesheet')
+        script(src='https://code.jquery.com/jquery-2.2.0.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
+        script(src='https://cdn.socket.io/socket.io-1.4.5.js')
+        script(src='/js/client.js' async)
+    body
+        p Hello
