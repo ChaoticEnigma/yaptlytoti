@@ -1,7 +1,7 @@
 #ifndef MAINWORKER_H
 #define MAINWORKER_H
 
-#include "main.h"
+#include "client.h"
 #include <QObject>
 
 class MainWorker : public QObject {

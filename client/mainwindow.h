@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "main.h"
+#include "client.h"
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
