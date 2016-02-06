@@ -11,22 +11,34 @@ html {
     flex: 1;
     display: flex;
     flex-direction: column;
+    padding: 15px;
 
     #channels {
         flex: 3;
         display: flex;
         flex-direction: column;
+        overflow: auto;
 
         #channel-chat {
             flex: 1;
             display: flex;
             flex-direction: column;
+            overflow: auto;
+
+            ul {
+                overflow: auto;
+            }
         }
 
         #channel-voice {
             flex: 1;
             display: flex;
             flex-direction: column;
+            overflow: auto;
+
+            ul {
+                overflow: auto;
+            }
         }
     }
 
@@ -40,6 +52,7 @@ html {
     flex: 2;
     display: flex;
     flex-direction: column;
+    padding: 15px;
 
     #server-header {
         display: flex;
@@ -59,17 +72,33 @@ html {
                 justify-content: space-around;
             }
         }
+
+        #server-bottom {
+            display: flex;
+
+            #server-tabs {
+                flex: 1;
+            }
+        }
     }
 
     #chat {
         flex: 1;
         display: flex;
         flex-direction: column;
+        overflow: auto;
 
-        #chat-text {
+        #chat-top {
             flex: 1;
             display: flex;
             flex-direction: column;
+            overflow: auto;
+
+            #chat-text-wrap {
+                flex: 1;
+                display: flex;
+                align-items: flex-end;
+            }
         }
     }
 }

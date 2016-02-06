@@ -37,6 +37,20 @@ html
                     .modal-footer
                         button.btn.btn-default(data-dismiss='modal') Close
 
+        #modal-server-join.modal.fade(tabindex='-1')
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        button.close(data-dismiss='modal')
+                            span ×
+                        h4.modal-title Join server
+                    .modal-body
+                        input#server-id.form-control(type='text', placeholder='Server address or url', autofocus)
+                        input#server-password.form-control(type='password', placeholder='Server password')
+                    .modal-footer
+                        button.btn.btn-default(data-dismiss='modal') Close
+                        button#server-confirm.btn.btn-primary(data-dismiss='modal') Join
+
         #modal-user-settings.modal.fade(tabindex='-1')
             .modal-dialog
                 .modal-content
@@ -55,13 +69,9 @@ html
                     #channel-chat
                         p Chat channels
                         ul
-                            li: a(href='#', data-id='c1') chat channel 1
-                            li: a(href='#', data-id='c2') chat channel 2
                     #channel-voice
                         p Voice channels
                         ul
-                            li: a(href='#', data-id='v1') voice channel 1
-                            li: a(href='#', data-id='v2') voice channel 2
                 #pane-user
                     #user-picture
                     #user-name
@@ -94,11 +104,13 @@ html
                             #server-icon
                     #server-bottom
                         ul#server-tabs.nav.nav-tabs
-                            li.active: a(href='#', data-id='s1') Server 1
-                            li: a(href='#', data-id='s2') Server 2
+                        button#server-join-btn.btn.btn-default(title='Join a server', data-toggle='modal', data-target='#modal-server-join')
+                            i.fa.fa-fw.fa-plus
                 #chat
-                    #chat-text
-                        #channel-name-current.text-center
-                            p Channel name
-                    #chat-box
+                    #channel-name-current.text-center
+                        p Channel name
+                    #chat-top
+                        #chat-text-wrap
+                            #chat-text-container
+                    #chat-bottom
                         input#chat-box-input.form-control(type='text', placeholder='Enter text for <channel name>')
