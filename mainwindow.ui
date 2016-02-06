@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>894</width>
+    <height>559</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>YAPTLYTOTI</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch=""/>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>894</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuTest">
+    <property name="title">
+     <string>Test</string>
+    </property>
+    <addaction name="actionSomething"/>
+    <addaction name="actionAdd"/>
+    <addaction name="action38"/>
+    <addaction name="action76"/>
+   </widget>
+   <widget class="QMenu" name="menuRecent">
+    <property name="title">
+     <string>Recent</string>
+    </property>
+   </widget>
+   <addaction name="menuTest"/>
+   <addaction name="menuRecent"/>
+  </widget>
+  <action name="actionSomething">
+   <property name="text">
+    <string>Something</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionAdd">
+   <property name="text">
+    <string>Add</string>
+   </property>
+  </action>
+  <action name="action38">
+   <property name="text">
+    <string>Progress 38</string>
+   </property>
+  </action>
+  <action name="action76">
+   <property name="text">
+    <string>Progress 76</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
