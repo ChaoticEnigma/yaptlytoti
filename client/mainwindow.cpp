@@ -1,12 +1,27 @@
 #include "mainwindow.h"
 #include <QtWidgets>
 
-MainWindow::MainWindow(Client *client) : client(client){
-    textEdit = new QTextEdit;
-    setCentralWidget(textEdit);
+MainWindow::MainWindow(Client *client) : client(client) {
+
+    chatframe = new QWidget();
+    boxlayout = new QBoxLayout(QBoxLayout::TopToBottom, chatframe);
+    boxlayout->setContentsMargins(0,0,0,0);
+    boxlayout->setSpacing(0);
+
+    chattitle = new QLineEdit(chatframe);
+    chattitle->setStyleSheet("border: 1px solid rgb(200,200,200); border-radius: 0px;");
+    chattitle->setReadOnly(true);
+    chattitle->setAlignment(Qt::AlignCenter);
+    chatbox = new QTextEdit(chatframe);
+    chatbox->setReadOnly(true);
+
+    boxlayout->addWidget(chattitle);
+    boxlayout->addWidget(chatbox);
+    chatframe->setLayout(boxlayout);
+    setCentralWidget(chatframe);
 
     setStyleSheet(
-        "QMainWindow::separator { background: rgb(200, 200, 200); width: 2px; height: 2px; }");
+        "MainWindow::separator { background: rgb(200, 200, 200); width: 2px; height: 2px; }");
 
     createActions();
     createMenus();
@@ -21,9 +36,10 @@ MainWindow::MainWindow(Client *client) : client(client){
 }
 
 void MainWindow::newLetter(){
-    textEdit->clear();
+    chatbox->clear();
 
-    QTextCursor cursor(textEdit->textCursor());
+
+    QTextCursor cursor(chatbox->textCursor());
     cursor.movePosition(QTextCursor::Start);
     QTextFrame *topFrame = cursor.currentFrame();
     QTextFrameFormat topFrameFormat = topFrame->frameFormat();
@@ -36,7 +52,7 @@ void MainWindow::newLetter(){
     QTextCharFormat italicFormat;
     italicFormat.setFontItalic(true);
 
-    QTextTableFormat tableFormat;
+    /*QTextTableFormat tableFormat;
     tableFormat.setBorder(1);
     tableFormat.setCellPadding(16);
     tableFormat.setAlignment(Qt::AlignRight);
@@ -47,22 +63,19 @@ void MainWindow::newLetter(){
     cursor.insertBlock();
     cursor.insertText("Industry Park");
     cursor.insertBlock();
-    cursor.insertText("Some Country");
+    cursor.insertText("Some Country"); */
     cursor.setPosition(topFrame->lastPosition());
-    cursor.insertText(QDate::currentDate().toString("d MMMM yyyy"), textFormat);
+    cursor.insertText("Railguy: ", boldFormat);
+    cursor.insertText("lol nub", textFormat);
     cursor.insertBlock();
+    cursor.insertText("Chaos: ", boldFormat);
+    cursor.insertText("nou", textFormat);
     cursor.insertBlock();
-    cursor.insertText("Dear ", textFormat);
-    cursor.insertText("NAME", italicFormat);
-    cursor.insertText(",", textFormat);
-    for (int i = 0; i < 3; ++i)
-        cursor.insertBlock();
-    cursor.insertText(tr("Yours sincerely,"), textFormat);
-    for (int i = 0; i < 3; ++i)
-        cursor.insertBlock();
-    cursor.insertText("The Boss", textFormat);
-    cursor.insertBlock();
-    cursor.insertText("ADDRESS", italicFormat);
+
+    QFont font = chattitle->font();
+    font.setBold(true);
+    chattitle->setFont(font);
+    chattitle->setText("#General");
 }
 
 void MainWindow::save(){
@@ -82,14 +95,14 @@ void MainWindow::save(){
 
     QTextStream out(&file);
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    out << textEdit->toHtml();
+    out << chatbox->toHtml();
     QApplication::restoreOverrideCursor();
 
     statusBar()->showMessage(tr("Saved '%1'").arg(fileName), 2000);
 }
 
 void MainWindow::undo(){
-    QTextDocument *document = textEdit->document();
+    QTextDocument *document = chatbox->document();
     document->undo();
 }
 
@@ -97,7 +110,7 @@ void MainWindow::insertCustomer(const QString &customer){
     if (customer.isEmpty())
         return;
     QStringList customerList = customer.split(", ");
-    QTextDocument *document = textEdit->document();
+    QTextDocument *document = chatbox->document();
     QTextCursor cursor = document->find("NAME");
     if (!cursor.isNull()) {
         cursor.beginEditBlock();
@@ -119,7 +132,7 @@ void MainWindow::insertCustomer(const QString &customer){
 void MainWindow::addParagraph(const QString &paragraph){
     if (paragraph.isEmpty())
         return;
-    QTextDocument *document = textEdit->document();
+    QTextDocument *document = chatbox->document();
     QTextCursor cursor = document->find(tr("Yours sincerely,"));
     if (cursor.isNull())
         return;
@@ -174,6 +187,8 @@ void MainWindow::createActions(){
     aboutQtAct = new QAction(tr("About &Qt"), this);
     aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
     connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+
+
 }
 
 void MainWindow::createMenus(){
@@ -215,6 +230,7 @@ void MainWindow::createDockWindows(){
     float h = (float)this->height();
 
     this->setCorner(Qt::TopLeftCorner,Qt::LeftDockWidgetArea);
+    this->setCorner(Qt::BottomLeftCorner,Qt::LeftDockWidgetArea);
 
     QDockWidget* dock = new QDockWidget(tr("Text Channels"), this);
     dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -236,30 +252,43 @@ void MainWindow::createDockWindows(){
     viewMenu->addAction(dock->toggleViewAction());
 
 
-    dock = new QDockWidget(this);
-    dock->setAllowedAreas(Qt::LeftDockWidgetArea);
+    clientinfo = new QDockWidget(this);
+    clientinfo->setAllowedAreas(Qt::LeftDockWidgetArea);
 
     QWidget* titleWidget = new QWidget(this);
-    dock->setTitleBarWidget( titleWidget ); /* Trick to hide titlebar */
+    clientinfo->setTitleBarWidget( titleWidget ); /* Trick to hide titlebar */
 
-    widg = new QWidget(dock); //Placeholder
-    dock->setWidget(widg);
+    widg = new QWidget(clientinfo); //Placeholder
+    //widg->setStyleSheet("border: 1px solid rgb(200,200,200); border-radius: 0px;");
+    clientinfo->setWidget(widg);
 
-    dock->setFixedHeight((int)(.25*h));
-    addDockWidget(Qt::LeftDockWidgetArea, dock);
+    clientinfo->setFixedHeight((int)(.25*h));
+    addDockWidget(Qt::LeftDockWidgetArea, clientinfo);
 
-    dock = new QDockWidget(this);
-    dock->setAllowedAreas(Qt::TopDockWidgetArea);
+    serverinfo = new QDockWidget(this);
+    serverinfo->setAllowedAreas(Qt::TopDockWidgetArea);
 
     titleWidget = new QWidget(this);
-    dock->setTitleBarWidget( titleWidget ); /* Trick to hide titlebar */
+    serverinfo->setTitleBarWidget( titleWidget ); /* Trick to hide titlebar */
 
-    widg = new QWidget(dock); //Placeholder
-    dock->setWidget(widg);
+    widg = new QWidget(serverinfo); //Placeholder
+    //widg->setStyleSheet("border: 1px solid rgb(200,200,200); border-radius: 0px;");
+    serverinfo->setWidget(widg);
 
-    dock->setFixedHeight((int)(.15*h));
-    addDockWidget(Qt::TopDockWidgetArea, dock);
+    serverinfo->setFixedHeight((int)(.15*h));
+    addDockWidget(Qt::TopDockWidgetArea, serverinfo);
 
+    chatbar = new QDockWidget(this);
+    chatbar->setAllowedAreas(Qt::BottomDockWidgetArea);
+
+    titleWidget = new QWidget(this);
+    chatbar->setTitleBarWidget( titleWidget ); /* Trick to hide titlebar */
+
+    chatline = new QLineEdit(chatbar);
+    chatline->setStyleSheet("border: 1px solid rgb(200,200,200); border-radius: 0px;");
+    chatbar->setWidget(chatline);
+
+    addDockWidget(Qt::BottomDockWidgetArea, chatbar);
 
    /* dock = new QDockWidget(tr("Paragraphs"), this);
     paragraphsList = new QListWidget(dock);
@@ -289,4 +318,13 @@ void MainWindow::createDockWindows(){
             this, SLOT(insertCustomer(QString)));
     connect(paragraphsList, SIGNAL(currentTextChanged(QString)),
             this, SLOT(addParagraph(QString)));*/
+}
+
+void MainWindow::resizeEvent(QResizeEvent * event) {
+
+    float h = (float)event->size().height();
+    serverinfo->setFixedHeight((int)(.15*h));
+    clientinfo->setFixedHeight((int)(.25*h));
+
+    QMainWindow::resizeEvent(event);
 }

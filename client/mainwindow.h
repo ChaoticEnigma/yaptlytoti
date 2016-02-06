@@ -9,6 +9,8 @@ class QAction;
 class QListWidget;
 class QMenu;
 class QTextEdit;
+class QLineEdit;
+class QBoxLayout;
 QT_END_NAMESPACE
 
 //! [0]
@@ -33,12 +35,21 @@ private:
     void createStatusBar();
     void createDockWindows();
 
+    void resizeEvent(QResizeEvent * event);
+
 private:
     Client *client;
 
-    QTextEdit *textEdit;
-    QListWidget *customerList;
-    QListWidget *paragraphsList;
+    QTextEdit *chatbox;
+    QLineEdit *chatline;
+    QWidget *chatframe;
+    QBoxLayout *boxlayout;
+    QLineEdit *chattitle;
+
+    QDockWidget *serverinfo;
+    QDockWidget *clientinfo;
+    QDockWidget *chatbar;
+
 
     QMenu *fileMenu;
     QMenu *editMenu;
