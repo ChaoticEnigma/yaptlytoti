@@ -2,8 +2,7 @@
 #define VOIP_H
 
 
-class VoIP
-{
+class VoIP {
 public:
     VoIP();
 };

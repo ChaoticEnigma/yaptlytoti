@@ -1,9 +1,9 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
+#include <QtNetwork>
 
-class Network
-{
+class Network {
 public:
     Network();
 };
