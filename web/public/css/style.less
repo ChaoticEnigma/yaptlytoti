@@ -3,11 +3,68 @@
 html {
     min-width: @minimumWidth;
 }
-header {
-
+#container {
+    display: flex;
+    height: 100vh;
 }
-main {
+#pane-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 
+    #channels {
+        flex: 3;
+        display: flex;
+        flex-direction: column;
+
+        #channel-chat {
+            flex: 1;
+            display: flex;
+        }
+
+        #channel-voice {
+            flex: 1;
+            display: flex;
+        }
+    }
+
+    #pane-user {
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+    }
+}
+#pane-right {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+
+    #server-header {
+        display: flex;
+
+        #server-left-pane {
+            flex: 3;
+        }
+
+        #server-right-pane {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+    }
+
+    #chat {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        #chat-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+    }
 }
 .faded {
     opacity: 0.5;
