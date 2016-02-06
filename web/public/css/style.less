@@ -1,0 +1,42 @@
+@minimumWidth: 360px;
+
+html {
+    min-width: @minimumWidth;
+}
+header {
+
+}
+main {
+
+}
+.faded {
+    opacity: 0.5;
+}
+.faded:hover {
+    opacity: 1;
+}
+.fixed-table {
+    width: 100%;
+    table-layout: fixed;
+}
+.fixed-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.none {
+    display: none;
+}
+.modal-dialog {
+    min-width: @minimumWidth;
+}
+.space-between {
+    display: -webkit-box; /* fallback for apple webkit */
+    display: flex;
+    justify-content: space-between;
+}
+
+// "mobile"
+@media (max-width: 768px) {
+}
+
