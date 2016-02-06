@@ -11,6 +11,7 @@ class QMenu;
 class QTextEdit;
 class QLineEdit;
 class QBoxLayout;
+class QLabel;
 QT_END_NAMESPACE
 
 //! [0]
@@ -43,8 +44,16 @@ private:
     QTextEdit *chatbox;
     QLineEdit *chatline;
     QWidget *chatframe;
-    QBoxLayout *boxlayout;
+    QWidget *clientbasicinfo;
+    QWidget *clientinfo2;
+    QTextEdit *clientadvinfo;
+    QBoxLayout *chatboxlayout;
+    QBoxLayout *clientboxlayout;
+    QBoxLayout *clientboxlayout2;
     QLineEdit *chattitle;
+    QLabel *userimagelabel;
+    QLineEdit *username;
+
 
     QDockWidget *serverinfo;
     QDockWidget *clientinfo;

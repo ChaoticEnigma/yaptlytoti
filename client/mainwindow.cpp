@@ -4,9 +4,9 @@
 MainWindow::MainWindow(Client *client) : client(client) {
 
     chatframe = new QWidget();
-    boxlayout = new QBoxLayout(QBoxLayout::TopToBottom, chatframe);
-    boxlayout->setContentsMargins(0,0,0,0);
-    boxlayout->setSpacing(0);
+    chatboxlayout = new QBoxLayout(QBoxLayout::TopToBottom, chatframe);
+    chatboxlayout->setContentsMargins(0,0,0,0);
+    chatboxlayout->setSpacing(0);
 
     chattitle = new QLineEdit(chatframe);
     chattitle->setStyleSheet("border: 1px solid rgb(200,200,200); border-radius: 0px;");
@@ -15,9 +15,9 @@ MainWindow::MainWindow(Client *client) : client(client) {
     chatbox = new QTextEdit(chatframe);
     chatbox->setReadOnly(true);
 
-    boxlayout->addWidget(chattitle);
-    boxlayout->addWidget(chatbox);
-    chatframe->setLayout(boxlayout);
+    chatboxlayout->addWidget(chattitle);
+    chatboxlayout->addWidget(chatbox);
+    chatframe->setLayout(chatboxlayout);
     setCentralWidget(chatframe);
 
     setStyleSheet(
@@ -252,18 +252,47 @@ void MainWindow::createDockWindows(){
     viewMenu->addAction(dock->toggleViewAction());
 
 
-    clientinfo = new QDockWidget(this);
+    clientinfo = new QDockWidget(this); //Client info frame
     clientinfo->setAllowedAreas(Qt::LeftDockWidgetArea);
+    clientinfo->setFixedHeight((int)(.25*h));   //Set height of clientinfo proportional to mainwindow
 
     QWidget* titleWidget = new QWidget(this);
-    clientinfo->setTitleBarWidget( titleWidget ); /* Trick to hide titlebar */
+    clientinfo->setTitleBarWidget( titleWidget ); // Trick to hide titlebar
+    
+    clientinfo2 = new QWidget(clientinfo);
+    clientinfo->setWidget(clientinfo2);
 
-    widg = new QWidget(clientinfo); //Placeholder
-    //widg->setStyleSheet("border: 1px solid rgb(200,200,200); border-radius: 0px;");
-    clientinfo->setWidget(widg);
+    clientboxlayout = new QBoxLayout(QBoxLayout::TopToBottom, clientinfo2); //Outer client box layout
+    clientboxlayout->setContentsMargins(0,0,0,0);
+    clientboxlayout->setSpacing(0);
 
-    clientinfo->setFixedHeight((int)(.25*h));
+
+    clientbasicinfo = new QWidget(clientinfo2); //Upper Client Info Container
+    clientboxlayout2 = new QBoxLayout(QBoxLayout::LeftToRight, clientbasicinfo); //Inner client box layout
+    clientboxlayout2->setContentsMargins(0,0,0,0);
+    clientboxlayout2->setSpacing(0);
+
+    QPixmap image("/images/blah.jpg");
+    userimagelabel = new QLabel(); //Create the user image box
+    userimagelabel->setFixedHeight((int)(.5*clientinfo->height())); //Set height of image proportional to clientinfo
+    userimagelabel->setPixmap(image);
+
+    username = new QLineEdit(); //Create Username line
+
+    clientboxlayout2->addWidget(userimagelabel); //Add user image
+    clientboxlayout2->addWidget(username); //Add user name
+
+    clientbasicinfo->setLayout(clientboxlayout2); //Add inner box layout to upper client container
+
+
+    clientadvinfo = new QTextEdit(clientinfo2); //Lower Client Info Text
+
+    clientboxlayout->addWidget(clientbasicinfo); //Add upper client container
+    clientboxlayout->addWidget(clientadvinfo); //Add lower client info text
+    clientinfo2->setLayout(clientboxlayout); //Add the outer layout to clientinfo frame
+
     addDockWidget(Qt::LeftDockWidgetArea, clientinfo);
+
 
     serverinfo = new QDockWidget(this);
     serverinfo->setAllowedAreas(Qt::TopDockWidgetArea);
