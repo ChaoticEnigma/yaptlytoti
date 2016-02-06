@@ -1,40 +1,44 @@
 ## YAPTLYTOTI CMakeLists.txt
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 
-PROJECT(yaptlytoti)
+PROJECT(YapTlyToti)
 
 #ADD_SUBDIRECTORY(libchaos)
 
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 SET(CMAKE_AUTOMOC ON)
+SET(CMAKE_AUTORCC ON)
 
 #FIND_PACKAGE(Qt5Core REQUIRED)
 #FIND_PACKAGE(Qt5Gui REQUIRED)
 FIND_PACKAGE(Qt5Widgets 5.0 REQUIRED)
 
-SET(yaptlytoti_HEADERS ### =================== HEADERS =================== ###
+SET(Yap_HEADERS ### =================== HEADERS =================== ###
     client/main.h
     client/mainwindow.h
     client/mainworker.h
 )
-SET(yaptlytoti_SOURCES ### =================== SOURCES =================== ###
+SET(Yap_SOURCES ### =================== SOURCES =================== ###
     client/main.cpp
     client/mainwindow.cpp
-    client/mainwindowslots.cpp
+    #client/mainwindowslots.cpp
     client/mainworker.cpp
 )
-SET(yaptlytoti_FORMS ### =================== FORMS =================== ###
-    client/mainwindow.ui
+SET(Yap_RESOURCES ### =================== RESOURCES =================== ###
+    client/mainwindow.qrc
 )
-SET(yaptlytoti_FILES ### =================== FILES =================== ###
+SET(Yap_FORMS ### =================== FORMS =================== ###
+    #client/mainwindow.ui
+)
+SET(Yap_FILES ### =================== FILES =================== ###
     LICENSE
-    README
+    README.md
 )
 
 ### =================== CONFIG =================== ###
 
 ADD_CUSTOM_TARGET(dummy SOURCES
-    ${yaptlytoti_FILES}
+    ${Yap_FILES}
 )
 
 INCLUDE_DIRECTORIES(
@@ -61,8 +65,10 @@ MESSAGE(STATUS ${QtWidgets_LOCATION})
 
 ADD_DEFINITIONS(-DBUILDING)
 
-qt5_wrap_ui(Forms_SOURCES ${yaptlytoti_FORMS})
+#qt5_wrap_ui(Forms_SOURCES ${Yap_FORMS})
 
-ADD_EXECUTABLE(yap ${yaptlytoti_HEADERS} ${yaptlytoti_SOURCES} ${Forms_SOURCES})
+#ADD_EXECUTABLE(yap ${Yap_HEADERS} ${Yap_SOURCES} ${Forms_SOURCES})
+ADD_EXECUTABLE(yap ${Yap_HEADERS} ${Yap_SOURCES} ${Yap_RESOURCES})
+SET_PROPERTY(TARGET yap PROPERTY AUTORCC ON)
 #TARGET_LINK_LIBRARIES(yap chaos)
 TARGET_LINK_LIBRARIES(yap Qt5::Widgets)

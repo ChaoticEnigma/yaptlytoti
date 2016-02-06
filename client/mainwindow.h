@@ -2,32 +2,58 @@
 #define MAINWINDOW_H
 
 #include "main.h"
-#include "ui_mainwindow.h"
 #include <QMainWindow>
-#include <QInputDialog>
 
-namespace Ui {
-    class MainWindow;
-}
+QT_BEGIN_NAMESPACE
+class QAction;
+class QListWidget;
+class QMenu;
+class QTextEdit;
+QT_END_NAMESPACE
 
+//! [0]
 class MainWindow : public QMainWindow {
     Q_OBJECT
+
 public:
-    explicit MainWindow(Client *client, QWidget *parent = 0);
-    ~MainWindow();
-    void resizeEvent(QResizeEvent *e);
+    MainWindow(Client *client);
+
+private slots:
+    void newLetter();
+    void save();
+    void undo();
+    void about();
+    void insertCustomer(const QString &customer);
+    void addParagraph(const QString &paragraph);
 
 private:
-
-public slots:
-
-signals:
-
-public:
-    Ui::MainWindow *ui;
+    void createActions();
+    void createMenus();
+    void createToolBars();
+    void createStatusBar();
+    void createDockWindows();
 
 private:
     Client *client;
-};
 
-#endif // MAINWINDOW_H
+    QTextEdit *textEdit;
+    QListWidget *customerList;
+    QListWidget *paragraphsList;
+
+    QMenu *fileMenu;
+    QMenu *editMenu;
+    QMenu *viewMenu;
+    QMenu *helpMenu;
+    QToolBar *fileToolBar;
+    QToolBar *editToolBar;
+    QAction *newLetterAct;
+    QAction *saveAct;
+    QAction *printAct;
+    QAction *undoAct;
+    QAction *aboutAct;
+    QAction *aboutQtAct;
+    QAction *quitAct;
+};
+//! [0]
+
+#endif
