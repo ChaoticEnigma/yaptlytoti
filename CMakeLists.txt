@@ -26,8 +26,16 @@ SET(yaptlytoti_SOURCES ### =================== SOURCES =================== ###
 SET(yaptlytoti_FORMS ### =================== FORMS =================== ###
     client/mainwindow.ui
 )
+SET(yaptlytoti_FILES ### =================== FILES =================== ###
+    LICENSE
+    README
+)
 
 ### =================== CONFIG =================== ###
+
+ADD_CUSTOM_TARGET(dummy SOURCES
+    ${yaptlytoti_FILES}
+)
 
 INCLUDE_DIRECTORIES(
     ${CMAKE_SOURCE_DIR}
