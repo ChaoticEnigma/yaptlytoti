@@ -56,6 +56,7 @@ private:
     QLineEdit *chattitle;
     QLabel *userimagelabel;
     QLineEdit *username;
+    QPixmap *image;
 
 
     QDockWidget *serverinfo;

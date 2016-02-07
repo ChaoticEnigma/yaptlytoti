@@ -244,6 +244,8 @@ void MainWindow::createDockWindows(){
 
     this->setCorner(Qt::TopLeftCorner,Qt::LeftDockWidgetArea);
     this->setCorner(Qt::BottomLeftCorner,Qt::LeftDockWidgetArea);
+    this->setCorner(Qt::TopRightCorner, Qt::RightDockWidgetArea);
+    this->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
     QDockWidget* dock = new QDockWidget(tr("Text Channels"), this);
     dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -265,14 +267,13 @@ void MainWindow::createDockWindows(){
     viewMenu->addAction(dock->toggleViewAction());
 
 
-    clientinfo = new QDockWidget(this); //Client info frame
-    clientinfo->setAllowedAreas(Qt::LeftDockWidgetArea);
-    clientinfo->setFixedHeight((int)(.25*h));   //Set height of clientinfo proportional to mainwindow
-
-    QWidget* titleWidget = new QWidget(this);
-    clientinfo->setTitleBarWidget( titleWidget ); // Trick to hide titlebar
+    clientinfo = new QDockWidget("User Info", this); //Client info frame
+    clientinfo->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     clientinfo2 = new QWidget(clientinfo);
+    clientinfo2->setFixedHeight((int)(.25*h));   //Set height of clientinfo proportional to mainwindow
+    clientinfo2->setMinimumWidth(2*clientinfo2->height());
+
     clientinfo->setWidget(clientinfo2);
 
     clientboxlayout = new QBoxLayout(QBoxLayout::TopToBottom, clientinfo2); //Outer client box layout
@@ -280,17 +281,32 @@ void MainWindow::createDockWindows(){
     clientboxlayout->setSpacing(0);
 
 
-    clientbasicinfo = new QWidget(clientinfo2); //Upper Client Info Container
+    clientbasicinfo = new QWidget(); //Upper Client Info Container
+
     clientboxlayout2 = new QBoxLayout(QBoxLayout::LeftToRight, clientbasicinfo); //Inner client box layout
     clientboxlayout2->setContentsMargins(0,0,0,0);
     clientboxlayout2->setSpacing(0);
 
-    QPixmap image("/images/blah.jpg");
+    image = new QPixmap(tr("../yaptlytoti/client/images/user.jpg"), "JPG");
     userimagelabel = new QLabel(); //Create the user image box
-    userimagelabel->setFixedHeight((int)(.5*clientinfo->height())); //Set height of image proportional to clientinfo
-    userimagelabel->setPixmap(image);
+    userimagelabel->setFixedHeight((int)(.5*clientinfo2->height())); //Set height of image proportional to clientinfo
+    userimagelabel->setFixedWidth((int)(.5*clientinfo2->height()));
+    userimagelabel->setPixmap(image->scaled(userimagelabel->width(), userimagelabel->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    userimagelabel->setStyleSheet("background-color: lightgrey;");
+
 
     username = new QLineEdit(); //Create Username line
+    username->setAlignment(Qt::AlignCenter);
+    username->setFixedHeight((int)(.5*clientinfo2->height()));
+    username->setStyleSheet("border: 1px solid rgb(200,200,200); border-radius: 0px;");
+    QFont font(username->font());
+    font.setBold(true);
+    font.setPointSize(20);
+    username->setTextMargins(6,0,6,0);
+    username->setFont(font);
+    username->setText("Railguy");
+    username->setReadOnly(true);
+    //username->setStyleSheet("background-color: red;");
 
     clientboxlayout2->addWidget(userimagelabel); //Add user image
     clientboxlayout2->addWidget(username); //Add user name
@@ -298,7 +314,7 @@ void MainWindow::createDockWindows(){
     clientbasicinfo->setLayout(clientboxlayout2); //Add inner box layout to upper client container
 
 
-    clientadvinfo = new QTextEdit(clientinfo2); //Lower Client Info Text
+    clientadvinfo = new QTextEdit(); //Lower Client Info Text
 
     clientboxlayout->addWidget(clientbasicinfo); //Add upper client container
     clientboxlayout->addWidget(clientadvinfo); //Add lower client info text
@@ -310,7 +326,7 @@ void MainWindow::createDockWindows(){
     serverinfo = new QDockWidget(this);
     serverinfo->setAllowedAreas(Qt::TopDockWidgetArea);
 
-    titleWidget = new QWidget(this);
+    QWidget *titleWidget = new QWidget(this);
     serverinfo->setTitleBarWidget( titleWidget ); /* Trick to hide titlebar */
 
     widg = new QWidget(serverinfo); //Placeholder
@@ -364,9 +380,15 @@ void MainWindow::createDockWindows(){
 
 void MainWindow::resizeEvent(QResizeEvent * event) {
 
+
     float h = (float)event->size().height();
     serverinfo->setFixedHeight((int)(.15*h));
-    clientinfo->setFixedHeight((int)(.25*h));
+    clientinfo2->setFixedHeight((int)(.25*h));
+    clientinfo2->setMinimumWidth(2*clientinfo2->height());
+    userimagelabel->setFixedHeight((int)(.5*clientinfo2->height())); //Set height of image proportional to clientinfo
+    userimagelabel->setFixedWidth((int)(.5*clientinfo2->height()));
+    userimagelabel->setPixmap(image->scaled(userimagelabel->width(), userimagelabel->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    username->setFixedHeight((int)(.5*clientinfo2->height()));
 
     QMainWindow::resizeEvent(event);
 }
