@@ -1,8 +1,10 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-class Client {
+#include <QDialog>
 
+struct Client {
+    QDialog *settingsDialog;
 };
 
 #endif // MAIN_H

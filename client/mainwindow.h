@@ -19,7 +19,10 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    MainWindow(Client *client);
+    explicit MainWindow(Client *client, QWidget *parent = 0);
+    ~MainWindow();
+
+    void init();
 
 private slots:
     void newLetter();
@@ -63,9 +66,12 @@ private:
     QMenu *fileMenu;
     QMenu *editMenu;
     QMenu *viewMenu;
+    QMenu *settingsMenu;
     QMenu *helpMenu;
+
     QToolBar *fileToolBar;
     QToolBar *editToolBar;
+
     QAction *newLetterAct;
     QAction *saveAct;
     QAction *printAct;
@@ -73,6 +79,7 @@ private:
     QAction *aboutAct;
     QAction *aboutQtAct;
     QAction *quitAct;
+    QAction *settingsAct;
 };
 //! [0]
 
