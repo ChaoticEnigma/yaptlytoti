@@ -6,12 +6,14 @@
 #include <QThread>
 
 int main(int argc, char **argv){
-    QApplication app(argc, argv);
-    Q_INIT_RESOURCE(mainwindow);
-    app.setOrganizationName("Zennix Studios");
-    app.setApplicationName("YapTlyToti");
+    QCoreApplication::setOrganizationName("Zennix Studios");
+    QCoreApplication::setApplicationName("YapTlyToti");
 
     Client *client = new Client;
+
+    QApplication app(argc, argv);
+    Q_INIT_RESOURCE(mainwindow);
+
     MainWindow *mainWindow = new MainWindow(client);
     client->settingsDialog = new SettingsDialog(client, mainWindow);
     mainWindow->init();
