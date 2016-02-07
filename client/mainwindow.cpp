@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include <QtWidgets>
 
-MainWindow::MainWindow(Client *client) : client(client) {
+MainWindow::MainWindow(Client *client, QWidget *parent) : QMainWindow(parent), client(client){
 
     chatframe = new QWidget();
     chatboxlayout = new QBoxLayout(QBoxLayout::TopToBottom, chatframe);
@@ -20,20 +20,26 @@ MainWindow::MainWindow(Client *client) : client(client) {
     chatframe->setLayout(chatboxlayout);
     setCentralWidget(chatframe);
 
-    setStyleSheet(
-        "MainWindow::separator { background: rgb(200, 200, 200); width: 2px; height: 2px; }");
+    setStyleSheet("MainWindow::separator { background: rgb(200, 200, 200); width: 2px; height: 2px; }");
 
+    setWindowTitle(tr("Yet Another Program that Lets You Talk on the Internet (Yap)"));
+    setUnifiedTitleAndToolBarOnMac(true);
+}
+
+MainWindow::~MainWindow(){
+
+}
+
+void MainWindow::init(){
     createActions();
     createMenus();
     //createToolBars();
     createStatusBar();
     createDockWindows();
 
-    setWindowTitle(tr("Yet Another Program that Lets You Talk on the Internet (Yap)"));
-
     newLetter();
-    setUnifiedTitleAndToolBarOnMac(true);
 }
+
 
 void MainWindow::newLetter(){
     chatbox->clear();
@@ -180,6 +186,10 @@ void MainWindow::createActions(){
     quitAct->setStatusTip(tr("Quit the application"));
     connect(quitAct, SIGNAL(triggered()), this, SLOT(close()));
 
+    settingsAct = new QAction(tr("&Settings..."), this);
+    settingsAct->setStatusTip(tr("Open the settings dialog"));
+    connect(settingsAct, SIGNAL(triggered()), client->settingsDialog, SLOT(show()));
+
     aboutAct = new QAction(tr("&About"), this);
     aboutAct->setStatusTip(tr("Show the application's About box"));
     connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
@@ -204,7 +214,10 @@ void MainWindow::createMenus(){
 
     viewMenu = menuBar()->addMenu(tr("&View"));
 
-    menuBar()->addSeparator();
+    settingsMenu = menuBar()->addMenu(tr("&Settings"));
+    settingsMenu->addAction(settingsAct);
+
+    //menuBar()->addSeparator();
 
     helpMenu = menuBar()->addMenu(tr("&Help"));
     helpMenu->addAction(aboutAct);
@@ -258,7 +271,7 @@ void MainWindow::createDockWindows(){
 
     QWidget* titleWidget = new QWidget(this);
     clientinfo->setTitleBarWidget( titleWidget ); // Trick to hide titlebar
-    
+
     clientinfo2 = new QWidget(clientinfo);
     clientinfo->setWidget(clientinfo2);
 
