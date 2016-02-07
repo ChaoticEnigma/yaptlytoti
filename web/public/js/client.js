@@ -72,6 +72,8 @@ var voice = {
 var chat = {
     // the current chat channel the user is in
     current: null,
+    // max items in the chat (before loading old history)
+    max: 100,
 
     // join a chat channel
     join: function (id) {
@@ -86,8 +88,9 @@ var chat = {
 
     // send text to the current channel
     send: function (user, text) {
-        var html = '<div class="media"><div class="media-left">IMG</div><div class="media-body"><h4 class="media-heading">' + user + '</h4>' + text + '</div></div>';
+        var html = '<div class="media"><div class="media-left">IMG</div><div class="media-body"><h4 class="media-heading">' + user + '<small> - DATE</small></h4>' + text + '</div></div>';
         $('#chat-text-container').append(html);
+        //$('#chat-top').scrollTop($('#chat-top')[0].scrollHeight);
     },
 
     initEvents: function () {
@@ -132,9 +135,51 @@ var users = {
     }
 };
 
+// this may be changed in the future
+var dragPanes = {
+    init: function () {
+        $('.split-pane').splitPane();
+
+        var leftPane = localStorage.getItem('yap-left-pane-size');
+        if (leftPane !== null) {
+            $('#container').splitPane('firstComponentSize', leftPane);
+        }
+
+        var channelPane = localStorage.getItem('yap-channel-pane-size');
+        if (channelPane !== null) {
+            // +15 to account for padding
+            $('#channels').splitPane('firstComponentSize', parseInt(channelPane) + 15);
+        }
+
+        $('.split-pane').on('dividerdragstart', function (event, obj) {
+            // a bug with ff makes it select all the text the last pane
+            $('body').addClass('no-select');
+        });
+
+        $('.split-pane').on('dividerdragend', function (event, obj) {
+            $('body').removeClass('no-select');
+        });
+
+        $('#container').on('dividerdragend', function (event, obj) {
+            if (event.target === this) {
+                localStorage.setItem('yap-left-pane-size', obj.firstComponentSize);
+            }
+        });
+
+        $('#channels').on('dividerdragend', function (event, obj) {
+            if (event.target === this) {
+                console.log(obj);
+                localStorage.setItem('yap-channel-pane-size', obj.firstComponentSize);
+            }
+        });
+    }
+};
+
 voice .initEvents();
 chat  .initEvents();
 server.initEvents();
+
+dragPanes.init();
 
 // used for testing. May be removed in the future.
 function tests () {

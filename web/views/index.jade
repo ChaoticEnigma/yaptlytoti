@@ -8,11 +8,13 @@ html
         link(rel='shortcut icon', href='/img/favicon.png', type='image/x-icon')
         link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
         link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css')
+        link(rel='stylesheet', href='/split-pane/split-pane.css')
         link(rel='stylesheet', href='/css/style.css')
         link#theme(rel='stylesheet')
         script(src='https://code.jquery.com/jquery-2.2.0.min.js')
         script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
         script(src='https://cdn.socket.io/socket.io-1.4.5.js')
+        script(src='/split-pane/split-pane.min.js')
         script(src='/js/client.js' async)
     body
         #modal-server-info.modal.fade(tabindex='-1')
@@ -62,18 +64,20 @@ html
                     .modal-footer
                         button.btn.btn-default(data-dismiss='modal') Close
 
-        #container
+        #container.split-pane.fixed-left
 
-            #pane-left
-                #channels
-                    #channel-chat
+            #pane-left.split-pane-component
+                #channels.split-pane.fixed-top
+                    #channel-chat.split-pane-component
                         p Chat channels
                         ul
-                    #channel-voice
+                    #channel-divider.split-pane-divider
+                    #channel-voice.split-pane-component
                         p Voice channels
                         ul
                 #pane-user
                     #user-picture
+                        p IMG
                     #user-name
                         p User name
                     #user-pane-right
@@ -87,7 +91,8 @@ html
                             button#server-settings.btn.btn-default(title='Edit user settings', data-toggle='modal', data-target='#modal-user-settings')
                                 i.fa.fa-fw.fa-gear
 
-            #pane-right
+            #divider.split-pane-divider
+            #pane-right.split-pane-component
                 #server-header
                     #server-top
                         #server-left-pane

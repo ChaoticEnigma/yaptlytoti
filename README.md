@@ -25,7 +25,8 @@ YAPTLYTOTI (Yet Another Program That Lets You Talk Over The Internet) or YAP for
 2. File -> Open Project
 3. Open CMakeLists.txt
 4. Configure Project (assuming Desktop kit, or some similar kit)
-5. The project should be set up and ready to build and run
+5. Run CMake (with no Arguments) -> Finish
+6. The project should be set up and ready to build and run
 
 ## Alternate Names:
 YAV / YAVoIP (Yet Another VoIP)
