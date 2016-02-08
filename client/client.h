@@ -5,6 +5,7 @@
 #include <QDialog>
 #include <QAudioInput>
 #include <QAudioOutput>
+#include <QMutex>
 
 // Settings Keys
 #define AUDIO_INPUTDEVICE   "audio/inputDevice"
@@ -17,6 +18,7 @@ struct Client {
     QDialog *settingsDialog;
     QAudioInput *audioInput = nullptr;
     QAudioOutput *audioOutput = nullptr;
+    QMutex audioDeviceMutex;
 };
 
 #endif // MAIN_H

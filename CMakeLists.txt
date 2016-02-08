@@ -20,8 +20,8 @@ SET(Yap_SOURCES
     client/mainwindow.cpp
     client/mainwindowslots.cpp
 
-    client/mainworker.h
-    client/mainworker.cpp
+    client/audioworker.h
+    client/audioworker.cpp
 
     client/settingsdialog.h
     client/settingsdialog.cpp

@@ -1,7 +1,7 @@
 #include "client.h"
 #include "mainwindow.h"
 #include "settingsdialog.h"
-#include "mainworker.h"
+#include "audioworker.h"
 #include <QApplication>
 #include <QThread>
 
@@ -18,7 +18,7 @@ int main(int argc, char **argv){
     client->settingsDialog = new SettingsDialog(client, mainWindow);
     mainWindow->init();
 
-    MainWorker *worker = new MainWorker(client);
+    AudioWorker *worker = new AudioWorker(client);
     QThread *thread = new QThread;
     QObject::connect(thread, SIGNAL(started()), worker, SLOT(run()));
 

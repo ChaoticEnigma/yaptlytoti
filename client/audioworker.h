@@ -4,13 +4,15 @@
 #include "client.h"
 #include <QObject>
 
-class MainWorker : public QObject {
+class AudioWorker : public QObject {
     Q_OBJECT
 public:
-    explicit MainWorker(Client *client, QObject *parent = 0);
+    explicit AudioWorker(Client *client, QObject *parent = 0);
 
 public slots:
     void run();
+    void inputNotified();
+    void outputNotified();
 
 private:
     Client *client;

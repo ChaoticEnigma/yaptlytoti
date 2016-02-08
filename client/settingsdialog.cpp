@@ -69,13 +69,25 @@ void SettingsDialog::inputDeviceChanged(int idx){
         client->settings.setValue(AUDIO_INPUTDEVICE, inputDeviceInfo.deviceName());
     }
     qInfo() << "Input Device:" << inputDeviceInfo.deviceName() << (client->settings.value(AUDIO_DEFAULTINPUT).toBool() ? "(default)" : "");
+    // Open input device
+    client->audioDeviceMutex.lock();
     delete client->audioInput;
+//    QAudioFormat format;
+//    format.setCodec("audio/pcm");
+//    format.setChannelCount(2);
+//    format.setSampleType(QAudioFormat::SignedInt);
+//    format.setSampleSize(16);
+//    format.setSampleRate(44100);
+//    client->audioInput = new QAudioInput(inputDeviceInfo, format);
     client->audioInput = new QAudioInput(inputDeviceInfo, inputDeviceInfo.preferredFormat());
     qInfo() << "Input Format:"
             << client->audioInput->format().codec()
-            << client->audioInput->format().sampleType()
+            << client->audioInput->format().channelCount() << "channels"
+            << client->audioInput->format().sampleRate() << "Hz"
             << client->audioInput->format().sampleSize() << "bit"
-            << client->audioInput->format().sampleRate() << "Hz";
+            << client->audioInput->format().sampleType()
+            << client->audioInput->format().byteOrder();
+    client->audioDeviceMutex.unlock();
 }
 
 void SettingsDialog::outputDeviceChanged(int idx){
@@ -89,11 +101,16 @@ void SettingsDialog::outputDeviceChanged(int idx){
         client->settings.setValue(AUDIO_OUTPUTDEVICE, outputDeviceInfo.deviceName());
     }
     qInfo() << "Output Device:" << outputDeviceInfo.deviceName() << (client->settings.value(AUDIO_DEFAULTOUTPUT).toBool() ? "(default)" : "");
+    // Open output device
+    client->audioDeviceMutex.lock();
     delete client->audioOutput;
     client->audioOutput = new QAudioOutput(outputDeviceInfo, outputDeviceInfo.preferredFormat());
     qInfo() << "Output Format:"
             << client->audioOutput->format().codec()
-            << client->audioOutput->format().sampleType()
+            << client->audioOutput->format().channelCount() << "channels"
+            << client->audioOutput->format().sampleRate() << "Hz"
             << client->audioOutput->format().sampleSize() << "bit"
-            << client->audioOutput->format().sampleRate() << "Hz";
+            << client->audioOutput->format().sampleType()
+            << client->audioOutput->format().byteOrder();
+    client->audioDeviceMutex.unlock();
 }
