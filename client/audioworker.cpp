@@ -9,19 +9,27 @@ AudioWorker::AudioWorker(Client *client, QObject *parent) : QObject(parent), cli
 
 void AudioWorker::run(){
     qDebug() << "Starting Audio Thread";
-    QBuffer *buffer = new QBuffer;
-    buffer->open(QIODevice::ReadWrite | QIODevice::Unbuffered);
+
+    inputdata = new QByteArray;
+    inputdata->resize(1024);
+    inputbuffer = new QBuffer(inputdata);
+    inputbuffer->open(QIODevice::ReadWrite | QIODevice::Unbuffered);
+
+    outputdata = new QByteArray;
+    outputdata->resize(1024);
+    outputbuffer = new QBuffer(outputdata);
+    outputbuffer->open(QIODevice::ReadWrite | QIODevice::Unbuffered);
 
     client->audioDeviceMutex.lock();
 
     qInfo() << "Input Devive State:" << client->audioInput->state();
-    client->audioInput->start(buffer);
+    client->audioInput->start(inputbuffer);
     client->audioInput->setNotifyInterval(10);
     connect(client->audioInput, SIGNAL(notify()), this, SLOT(inputNotified()));
     qInfo() << "Input Devive State:" << client->audioInput->state();
 
     qInfo() << "Output Devive State:" << client->audioOutput->state();
-    client->audioOutput->start(buffer);
+    client->audioOutput->start(outputbuffer);
     client->audioOutput->setNotifyInterval(10);
     connect(client->audioOutput, SIGNAL(notify()), this, SLOT(outputNotified()));
     qInfo() << "Output Devive State:" << client->audioOutput->state();
@@ -30,9 +38,9 @@ void AudioWorker::run(){
 }
 
 void AudioWorker::inputNotified(){
-
+    qDebug() << "Input " << inputbuffer->bytesAvailable() << client->audioInput->state();
 }
 
 void AudioWorker::outputNotified(){
-
+    qDebug() << "Output" << outputbuffer->bytesAvailable() << client->audioOutput->state();
 }

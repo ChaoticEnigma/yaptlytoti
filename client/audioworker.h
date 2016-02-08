@@ -3,6 +3,8 @@
 
 #include "client.h"
 #include <QObject>
+#include <QByteArray>
+#include <QBuffer>
 
 class AudioWorker : public QObject {
     Q_OBJECT
@@ -16,6 +18,10 @@ public slots:
 
 private:
     Client *client;
+    QByteArray *inputdata;
+    QBuffer *inputbuffer;
+    QByteArray *outputdata;
+    QBuffer *outputbuffer;
 };
 
 #endif // MAINWORKER_H
