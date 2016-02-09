@@ -17,7 +17,8 @@ YAPTLYTOTI (Yet Another Program That Lets You Talk Over The Internet) or YAP for
     git clone https://github.com/ChaoticCrux/yaptlytoti.git yap
     mkdir yap-build
     cd yap-build
-    cmake ../yap
+    cmake ../yap # if qt5.5 was installed via a package manager
+    cmake ../yap -DCMAKE_PREFIX_PATH=/opt/Qt/5.5/gcc_64 # if qt5.5 was installed manually (the path may be different)
     make
 
 #### Developing with Qt Creator
