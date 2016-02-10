@@ -3,18 +3,21 @@
 #include <QDebug>
 #include <QBuffer>
 
-#include "opus/opus.h"
-
 #define INPUT_BUFFER 4096
 
-AudioWorker::AudioWorker(Client *client, QObject *parent) : QObject(parent), client(client){
+AudioWorker::AudioWorker(Client *client, QObject *parent) : QObject(parent), client(client), input(nullptr), output(nullptr), loopbuffer(nullptr){
 
+}
+
+AudioWorker::~AudioWorker(){
+    delete loopbuffer;
 }
 
 void AudioWorker::run(){
     qDebug() << "Starting Audio Thread";
 
-    inputbuffer = new QByteArray(INPUT_BUFFER, 0);
+    delete loopbuffer;
+    loopbuffer = new QByteArray(INPUT_BUFFER, 0);
     //inputdata->resize(1024);
     //inputbuffer = new QBuffer(inputdata);
     //inputbuffer->open(QIODevice::ReadWrite | QIODevice::Unbuffered);
@@ -23,6 +26,9 @@ void AudioWorker::run(){
     //outputdata->resize(1024);
     //outputbuffer = new QBuffer(outputdata);
     //outputbuffer->open(QIODevice::ReadWrite | QIODevice::Unbuffered);
+
+    int error;
+    encode = opus_encoder_create(client->audioInput->format().sampleRate(), client->audioInput->format().channelCount(), OPUS_APPLICATION_VOIP, &error);
 
     client->audioDeviceMutex.lock();
 
@@ -44,11 +50,13 @@ void AudioWorker::run(){
 }
 
 void AudioWorker::inputRead(){
+    client->audioDeviceMutex.lock();
     qint64 len = client->audioInput->bytesReady();
     if(len > INPUT_BUFFER) len = INPUT_BUFFER;
     qInfo() << "Read " << len;
-    input->read(inputbuffer->data(), len);
-    output->write(inputbuffer->data());
+    input->read(loopbuffer->data(), len);
+    output->write(loopbuffer->data());
+    client->audioDeviceMutex.unlock();
 }
 
 void AudioWorker::inputNotified(){
