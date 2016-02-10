@@ -23,7 +23,7 @@ MainWindow::MainWindow(Client *client, QWidget *parent) : QMainWindow(parent), c
     setStyleSheet("MainWindow::separator { background: rgb(200, 200, 200); width: 2px; height: 2px; }");
 
     setWindowTitle(tr("Yet Another Program that Lets You Talk on the Internet (Yap)"));
-    setUnifiedTitleAndToolBarOnMac(true);
+    //setUnifiedTitleAndToolBarOnMac(true);
 }
 
 MainWindow::~MainWindow(){
@@ -36,6 +36,8 @@ void MainWindow::init(){
     //createToolBars();
     createStatusBar();
     createDockWindows();
+
+    //setUnifiedTitleAndToolBarOnMac(true);
 
     newLetter();
 }
