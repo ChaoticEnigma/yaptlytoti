@@ -13,15 +13,19 @@ public:
 
 public slots:
     void run();
+    void inputRead();
     void inputNotified();
     void outputNotified();
 
 private:
     Client *client;
-    QByteArray *inputdata;
-    QBuffer *inputbuffer;
-    QByteArray *outputdata;
-    QBuffer *outputbuffer;
+    //QByteArray *inputdata;
+    //QBuffer *inputbuffer;
+    QByteArray *inputbuffer;
+    QIODevice *input;
+    //QByteArray *outputdata;
+    //QBuffer *outputbuffer;
+    QIODevice *output;
 };
 
 #endif // MAINWORKER_H
