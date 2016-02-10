@@ -3,6 +3,8 @@
 #include <QDebug>
 #include <QBuffer>
 
+#include "opus/opus.h"
+
 #define INPUT_BUFFER 4096
 
 AudioWorker::AudioWorker(Client *client, QObject *parent) : QObject(parent), client(client){
