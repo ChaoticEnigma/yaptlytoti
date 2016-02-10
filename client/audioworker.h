@@ -6,10 +6,13 @@
 #include <QByteArray>
 #include <QBuffer>
 
+#include "opus/opus.h"
+
 class AudioWorker : public QObject {
     Q_OBJECT
 public:
     explicit AudioWorker(Client *client, QObject *parent = 0);
+    ~AudioWorker();
 
 public slots:
     void run();
@@ -21,11 +24,13 @@ private:
     Client *client;
     //QByteArray *inputdata;
     //QBuffer *inputbuffer;
-    QByteArray *inputbuffer;
-    QIODevice *input;
+    QIODevice *input;   // Provided by QAudioInput
+    QIODevice *output;  // Provided by QAudioOutput
+    QByteArray *loopbuffer;
     //QByteArray *outputdata;
     //QBuffer *outputbuffer;
-    QIODevice *output;
+    OpusEncoder *encode;
+    OpusDecoder *decode;
 };
 
 #endif // MAINWORKER_H
