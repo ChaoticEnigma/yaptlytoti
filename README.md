@@ -3,22 +3,31 @@ YAPTLYTOTI (Yet Another Program That Lets You Talk Over The Internet) or YAP for
 
 ## Compilation
 
-### Linux Dependencies
+### Client Dependencies (All Platforms)
 * CMake
-* Qt5.5
+* Qt5.5 Widgets, Multimedia
+
+### Client Dependencies (Linux)
 * Install `mesa-common-dev` (if you do not have graphics drivers installed)
 
-### Windows Dependenceis
-* CMake
-* Qt5.5
-
-#### Compiling from Terminal
+#### Client Compilation
 
     git clone https://github.com/ChaoticCrux/yaptlytoti.git yap
     mkdir yap-build
     cd yap-build
-    cmake ../yap # if qt5.5 was installed via a package manager
-    cmake ../yap -DCMAKE_PREFIX_PATH=/opt/Qt/5.5/gcc_64 # if qt5.5 was installed manually (the path may be different)
+    cmake ../yap
+    make
+
+### Server Dependencies (All Platforms)
+* CMake
+
+#### Server Compilation
+
+    git clone https://github.com/ChaoticCrux/yaptlytoti.git yap
+    mkdir yap-build
+    cd yap-build
+    cmake -DYAP_CLIENT=0 -DYAP_SERVER=1 ../yap # if qt5.5 was installed via a package manager
+    cmake -DYAP_CLIENT=0 -DYAP_SERVER=1 ../yap -DCMAKE_PREFIX_PATH=/opt/Qt/5.5/gcc_64 # if qt5.5 was installed manually (the path may be different)
     make
 
 #### Developing with Qt Creator
