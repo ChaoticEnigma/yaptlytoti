@@ -98,6 +98,7 @@ IF(YAP_CLIENT)
     MESSAGE(STATUS "Qt5Widgets: ${QtWidgets_LOCATION}")
     MESSAGE(STATUS "Qt5Multimedia: ${QtMultimedia_LOCATION}")
     MESSAGE(STATUS "Qt5Network: ${QtNetwork_LOCATION}")
+
     SET(CLIENT_ALL)
 ELSE()
     SET(CLIENT_ALL EXCLUDE_FROM_ALL)
