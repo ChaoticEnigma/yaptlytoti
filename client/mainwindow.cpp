@@ -155,10 +155,10 @@ void MainWindow::addParagraph(const QString &paragraph){
 
 void MainWindow::about(){
    QMessageBox::about(this, tr("About Dock Widgets"),
-            tr("The <b>Dock Widgets</b> example demonstrates how to "
-               "use Qt's dock widgets. You can enter your own text, "
-               "click a customer to add a customer name and "
-               "address, and click standard paragraphs to add them."));
+            tr("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+               "Nam porta imperdiet metus, finibus pharetra justo. "
+               "Integer aliquam lorem a tincidunt aliquet. Proin "
+               "eleifend maximus tincidunt."));
 }
 
 void MainWindow::createActions(){
@@ -205,14 +205,14 @@ void MainWindow::createActions(){
 
 void MainWindow::createMenus(){
     fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(newLetterAct);
-    fileMenu->addAction(saveAct);
-    fileMenu->addAction(printAct);
-    fileMenu->addSeparator();
+    //fileMenu->addAction(newLetterAct);
+    //fileMenu->addAction(saveAct);
+    //fileMenu->addAction(printAct);
+    //fileMenu->addSeparator();
     fileMenu->addAction(quitAct);
 
     editMenu = menuBar()->addMenu(tr("&Edit"));
-    editMenu->addAction(undoAct);
+    //editMenu->addAction(undoAct);
 
     viewMenu = menuBar()->addMenu(tr("&View"));
 
@@ -223,7 +223,7 @@ void MainWindow::createMenus(){
 
     helpMenu = menuBar()->addMenu(tr("&Help"));
     helpMenu->addAction(aboutAct);
-    helpMenu->addAction(aboutQtAct);
+    //helpMenu->addAction(aboutQtAct);
 }
 
 void MainWindow::createToolBars(){
@@ -284,16 +284,24 @@ void MainWindow::createDockWindows(){
 
 
     clientbasicinfo = new QWidget(); //Upper Client Info Container
+    clientadvancedinfo = new QWidget(); //Lower Client Info Container
+    clientbuttons = new QWidget(); // Client Button container
 
     clientboxlayout2 = new QBoxLayout(QBoxLayout::LeftToRight, clientbasicinfo); //Inner client box layout
     clientboxlayout2->setContentsMargins(0,0,0,0);
     clientboxlayout2->setSpacing(0);
+    clientboxlayout3 = new QBoxLayout(QBoxLayout::LeftToRight, clientadvancedinfo);
+    clientboxlayout3->setContentsMargins(0,0,0,0);
+    clientboxlayout3->setSpacing(0);
+    clientboxlayout4 = new QBoxLayout(QBoxLayout::TopToBottom, clientbuttons);
+    clientboxlayout4->setContentsMargins(10,0,0,0);
+    clientboxlayout4->setSpacing(0);
 
-    image = new QPixmap(tr("../yaptlytoti/client/images/user.jpg"), "JPG");
+    userimage = new QPixmap(tr("../yaptlytoti/client/images/user.jpg"), "JPG");
     userimagelabel = new QLabel(); //Create the user image box
     userimagelabel->setFixedHeight((int)(.5*clientinfo2->height())); //Set height of image proportional to clientinfo
     userimagelabel->setFixedWidth((int)(.5*clientinfo2->height()));
-    userimagelabel->setPixmap(image->scaled(userimagelabel->width(), userimagelabel->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    userimagelabel->setPixmap(userimage->scaled(userimagelabel->width(), userimagelabel->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     userimagelabel->setStyleSheet("background-color: lightgrey;");
 
 
@@ -316,13 +324,64 @@ void MainWindow::createDockWindows(){
     clientbasicinfo->setLayout(clientboxlayout2); //Add inner box layout to upper client container
 
 
+    // NOTE: I'm aware this can be done much faster, and I intend to do so, but it is not a high priority
     clientadvinfo = new QTextEdit(); //Lower Client Info Text
+    clientadvinfo->setLineWrapMode(QTextEdit::NoWrap);
+    clientadvinfo->setReadOnly(true);
+    clientadvinfo->clear();
+    clientadvinfo->setFontWeight(QFont::Bold);
+    clientadvinfo->insertPlainText("IP: ");
+    clientadvinfo->setFontWeight(QFont::Normal);
+    clientadvinfo->insertPlainText("192.137.42.69" "\n");
+    clientadvinfo->setFontWeight(QFont::Bold);
+    clientadvinfo->insertPlainText("Time connected: ");
+    clientadvinfo->setFontWeight(QFont::Normal);
+    clientadvinfo->insertPlainText("21" " days " "37" " minutes " "11" " seconds\n");
+    clientadvinfo->setFontWeight(QFont::Bold);
+    clientadvinfo->insertPlainText("Channel Roles: ");
+    clientadvinfo->setFontWeight(QFont::Normal);
+    clientadvinfo->insertPlainText("Normal" "\n");
+    clientadvinfo->setFontWeight(QFont::Bold);
+    clientadvinfo->insertPlainText("Server Roles: ");
+    clientadvinfo->setFontWeight(QFont::Normal);
+    clientadvinfo->insertPlainText("Zennix" ", " "Developer" "\n");
+    clientadvinfo->moveCursor(QTextCursor::Start);
+
+    settingsimage = new QPixmap(tr("../yaptlytoti/client/images/settings.png"), "PNG");
+    settingsbutton = new QLabel();
+    //settingsbutton->setStyleSheet("border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #C8C8C8;");
+    settingsbutton->setFixedHeight((int)(.16*clientinfo2->height()));
+    settingsbutton->setFixedWidth((int)(.16*clientinfo2->height()));
+    settingsbutton->setPixmap(settingsimage->scaled(settingsbutton->width(), settingsbutton->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    micmuteimage = new QPixmap(tr("../yaptlytoti/client/images/micmute.png"), "PNG");
+    micmutebutton = new QLabel();
+    micmutebutton->setFixedHeight((int)(.16*clientinfo2->height()));
+    micmutebutton->setFixedWidth((int)(.16*clientinfo2->height()));
+    micmutebutton->setPixmap(micmuteimage->scaled(micmutebutton->width(), micmutebutton->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    soundmuteimage = new QPixmap(tr("../yaptlytoti/client/images/soundmute.png"), "PNG");
+    soundmutebutton = new QLabel();
+    soundmutebutton->setFixedHeight((int)(.16*clientinfo2->height()));
+    soundmutebutton->setFixedWidth((int)(.16*clientinfo2->height()));
+    soundmutebutton->setPixmap(soundmuteimage->scaled(soundmutebutton->width(), soundmutebutton->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
+
+    clientboxlayout4->addWidget(settingsbutton);
+    clientboxlayout4->addWidget(micmutebutton);
+    clientboxlayout4->addWidget(soundmutebutton);
+    clientbuttons->setLayout(clientboxlayout4);
+    // TODO: Add buttons
+
+    clientboxlayout3->addWidget(clientadvinfo);
+    clientboxlayout3->addWidget(clientbuttons);
+    clientadvancedinfo->setLayout(clientboxlayout3);
+
 
     clientboxlayout->addWidget(clientbasicinfo); //Add upper client container
-    clientboxlayout->addWidget(clientadvinfo); //Add lower client info text
+    clientboxlayout->addWidget(clientadvancedinfo); //Add lower client info text
     clientinfo2->setLayout(clientboxlayout); //Add the outer layout to clientinfo frame
 
     addDockWidget(Qt::LeftDockWidgetArea, clientinfo);
+    viewMenu->addAction(clientinfo->toggleViewAction());
 
 
     serverinfo = new QDockWidget(this);
@@ -389,8 +448,20 @@ void MainWindow::resizeEvent(QResizeEvent * event) {
     clientinfo2->setMinimumWidth(2*clientinfo2->height());
     userimagelabel->setFixedHeight((int)(.5*clientinfo2->height())); //Set height of image proportional to clientinfo
     userimagelabel->setFixedWidth((int)(.5*clientinfo2->height()));
-    userimagelabel->setPixmap(image->scaled(userimagelabel->width(), userimagelabel->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    userimagelabel->setPixmap(userimage->scaled(userimagelabel->width(), userimagelabel->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     username->setFixedHeight((int)(.5*clientinfo2->height()));
+
+    settingsbutton->setFixedHeight((int)(.16*clientinfo2->height()));
+    settingsbutton->setFixedWidth((int)(.16*clientinfo2->height()));
+    settingsbutton->setPixmap(settingsimage->scaled(settingsbutton->width(), settingsbutton->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
+    micmutebutton->setFixedHeight((int)(.16*clientinfo2->height()));
+    micmutebutton->setFixedWidth((int)(.16*clientinfo2->height()));
+    micmutebutton->setPixmap(micmuteimage->scaled(micmutebutton->width(), micmutebutton->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
+    soundmutebutton->setFixedHeight((int)(.16*clientinfo2->height()));
+    soundmutebutton->setFixedWidth((int)(.16*clientinfo2->height()));
+    soundmutebutton->setPixmap(soundmuteimage->scaled(soundmutebutton->width(), soundmutebutton->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 
     QMainWindow::resizeEvent(event);
 }

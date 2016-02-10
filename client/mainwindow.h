@@ -47,16 +47,28 @@ private:
     QTextEdit *chatbox;
     QLineEdit *chatline;
     QWidget *chatframe;
-    QWidget *clientbasicinfo;
-    QWidget *clientinfo2;
-    QTextEdit *clientadvinfo;
     QBoxLayout *chatboxlayout;
+    QLineEdit *chattitle;
+
+    QWidget *clientinfo2;
+    QWidget *clientbasicinfo;
+    QWidget *clientadvancedinfo;
+    QWidget *clientbuttons;
+    QLabel *settingsbutton;
+    QLabel *micmutebutton;
+    QLabel *soundmutebutton;
+    QTextEdit *clientadvinfo;
     QBoxLayout *clientboxlayout;
     QBoxLayout *clientboxlayout2;
-    QLineEdit *chattitle;
+    QBoxLayout *clientboxlayout3;
+    QBoxLayout *clientboxlayout4;
     QLabel *userimagelabel;
     QLineEdit *username;
-    QPixmap *image;
+    QPixmap *userimage;
+    QPixmap *settingsimage;
+    QPixmap *micmuteimage;
+    QPixmap *soundmuteimage;
+
 
 
     QDockWidget *serverinfo;
