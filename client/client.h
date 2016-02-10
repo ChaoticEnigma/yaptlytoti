@@ -13,6 +13,8 @@
 #define AUDIO_OUTPUTDEVICE  "audio/outputDevice"
 #define AUDIO_DEFAULTOUTPUT "audio/defaultOutput"
 
+#define NOTIFY_MS 10
+
 struct Client {
     QSettings settings;
     QDialog *settingsDialog;
