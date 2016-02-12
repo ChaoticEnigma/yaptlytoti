@@ -17,7 +17,11 @@ public:
 
 private slots:
     void inputDeviceChanged(int idx);
-    void outputDeviceChanged(int);
+    void outputDeviceChanged(int idx);
+
+signals:
+    void inputDeviceChange();
+    void outputDeviceChange();
 
 private:
     Client *client;

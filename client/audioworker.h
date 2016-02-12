@@ -16,19 +16,17 @@ public:
 
 public slots:
     void run();
+    void initInput();
+    void initOutput();
     void inputRead();
     void inputNotified();
     void outputNotified();
 
 private:
     Client *client;
-    //QByteArray *inputdata;
-    //QBuffer *inputbuffer;
     QIODevice *input;   // Provided by QAudioInput
     QIODevice *output;  // Provided by QAudioOutput
     QByteArray *loopbuffer;
-    //QByteArray *outputdata;
-    //QBuffer *outputbuffer;
     OpusEncoder *encode;
     OpusDecoder *decode;
 };

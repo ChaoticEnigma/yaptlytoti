@@ -18,14 +18,6 @@ void AudioWorker::run(){
 
     delete loopbuffer;
     loopbuffer = new QByteArray(INPUT_BUFFER, 0);
-    //inputdata->resize(1024);
-    //inputbuffer = new QBuffer(inputdata);
-    //inputbuffer->open(QIODevice::ReadWrite | QIODevice::Unbuffered);
-
-    //QByteArray *outputdata = new QByteArray;
-    //outputdata->resize(1024);
-    //outputbuffer = new QBuffer(outputdata);
-    //outputbuffer->open(QIODevice::ReadWrite | QIODevice::Unbuffered);
 
     int error;
     // Opus encoder
@@ -46,31 +38,41 @@ void AudioWorker::run(){
         qCritical() << "Faied to create opus decoder: " << opus_strerror(error);
         return;
     }
+}
 
+void AudioWorker::initInput(){
     client->audioDeviceMutex.lock();
 
-    qInfo() << "Input Devive State:" << client->audioInput->state();
+    qInfo() << "Input Device State:" << client->audioInput->state();
     input = client->audioInput->start();
     connect(input, SIGNAL(readyRead()), this, SLOT(inputRead()));
-    //client->audioInput->setNotifyInterval(NOTIFY_MS);
-    //connect(client->audioInput, SIGNAL(notify()), this, SLOT(inputNotified()));
-    qInfo() << "Input Devive State:" << client->audioInput->state();
+    qInfo() << "Input Device State:" << client->audioInput->state();
 
-    qInfo() << "Output Devive State:" << client->audioOutput->state();
-    //client->audioOutput->start(input);
+    client->audioDeviceMutex.unlock();
+}
+
+void AudioWorker::initOutput(){
+    client->audioDeviceMutex.lock();
+
+    qInfo() << "Output Device State:" << client->audioOutput->state();
     output = client->audioOutput->start();
-    //client->audioOutput->setNotifyInterval(NOTIFY_MS);
-    //connect(client->audioOutput, SIGNAL(notify()), this, SLOT(outputNotified()));
-    qInfo() << "Output Devive State:" << client->audioOutput->state();
+    qInfo() << "Output Device State:" << client->audioOutput->state();
 
     client->audioDeviceMutex.unlock();
 }
 
 void AudioWorker::inputRead(){
     client->audioDeviceMutex.lock();
+
     qint64 len = client->audioInput->bytesReady();
     // Limit read to buffer size
     if(len > INPUT_BUFFER) len = INPUT_BUFFER;
+    // Do nothing if len is 0
+    if(len == 0){
+        client->audioDeviceMutex.unlock();
+        return;
+    }
+
     qInfo() << "Read " << len;
     // Read PCM data
     input->read(loopbuffer->data(), len);
@@ -79,6 +81,7 @@ void AudioWorker::inputRead(){
     opus_int32 olen = opus_encode(encode, (opus_int16 *)loopbuffer->data(), 0, (unsigned char *)odata.data(), INPUT_BUFFER);
 
     output->write(loopbuffer->data());
+
     client->audioDeviceMutex.unlock();
 }
 

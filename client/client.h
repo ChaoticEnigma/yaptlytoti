@@ -15,12 +15,15 @@
 
 #define NOTIFY_MS 10
 
+class AudioWorker;
+
 struct Client {
     QSettings settings;
     QDialog *settingsDialog;
     QAudioInput *audioInput = nullptr;
     QAudioOutput *audioOutput = nullptr;
     QMutex audioDeviceMutex;
+    AudioWorker *audioworker;
 };
 
 #endif // MAIN_H

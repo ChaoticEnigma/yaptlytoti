@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QAudioDeviceInfo>
 
+#include "audioworker.h"
+
 #define DEFAULT_DEVICE "Default"
 
 SettingsDialog::SettingsDialog(Client *client, QWidget *parent) : QDialog(parent), client(client), ui(new Ui::SettingsDialog){
@@ -52,6 +54,9 @@ SettingsDialog::SettingsDialog(Client *client, QWidget *parent) : QDialog(parent
     }
     outputDeviceChanged(ui->outputDeviceComboBox->currentIndex());
     connect(ui->outputDeviceComboBox, SIGNAL(activated(int)), SLOT(outputDeviceChanged(int)));
+
+    connect(this, SIGNAL(inputDeviceChange()), client->audioworker, SLOT(initInput()));
+    connect(this, SIGNAL(outputDeviceChange()), client->audioworker, SLOT(initOutput()));
 }
 
 SettingsDialog::~SettingsDialog(){
@@ -69,6 +74,7 @@ void SettingsDialog::inputDeviceChanged(int idx){
         client->settings.setValue(AUDIO_INPUTDEVICE, inputDeviceInfo.deviceName());
     }
     qInfo() << "Input Device:" << inputDeviceInfo.deviceName() << (client->settings.value(AUDIO_DEFAULTINPUT).toBool() ? "(default)" : "");
+
     // Open input device
     client->audioDeviceMutex.lock();
     delete client->audioInput;
@@ -88,12 +94,13 @@ void SettingsDialog::inputDeviceChanged(int idx){
             << client->audioInput->format().sampleType()
             << client->audioInput->format().byteOrder();
     client->audioDeviceMutex.unlock();
+    emit inputDeviceChange();
 }
 
 void SettingsDialog::outputDeviceChanged(int idx){
     // Check if the default device is selected
     if(ui->outputDeviceComboBox->currentText() == DEFAULT_DEVICE){
-        outputDeviceInfo = QAudioDeviceInfo::defaultInputDevice();
+        outputDeviceInfo = QAudioDeviceInfo::defaultOutputDevice();
         client->settings.setValue(AUDIO_DEFAULTOUTPUT, true);
     } else {
         outputDeviceInfo = ui->outputDeviceComboBox->itemData(idx).value<QAudioDeviceInfo>();
@@ -101,6 +108,7 @@ void SettingsDialog::outputDeviceChanged(int idx){
         client->settings.setValue(AUDIO_OUTPUTDEVICE, outputDeviceInfo.deviceName());
     }
     qInfo() << "Output Device:" << outputDeviceInfo.deviceName() << (client->settings.value(AUDIO_DEFAULTOUTPUT).toBool() ? "(default)" : "");
+
     // Open output device
     client->audioDeviceMutex.lock();
     delete client->audioOutput;
@@ -113,4 +121,5 @@ void SettingsDialog::outputDeviceChanged(int idx){
             << client->audioOutput->format().sampleType()
             << client->audioOutput->format().byteOrder();
     client->audioDeviceMutex.unlock();
+    emit outputDeviceChange();
 }

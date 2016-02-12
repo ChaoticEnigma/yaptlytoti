@@ -15,14 +15,16 @@ int main(int argc, char **argv){
     Q_INIT_RESOURCE(mainwindow);
 
     MainWindow *mainWindow = new MainWindow(client);
+
+    AudioWorker *worker = new AudioWorker(client);
+    client->audioworker = worker;
+    QThread *thread = new QThread;
+    QObject::connect(thread, SIGNAL(started()), worker, SLOT(run()));
+    thread->start();
+
     client->settingsDialog = new SettingsDialog(client, mainWindow);
     mainWindow->init();
 
-    AudioWorker *worker = new AudioWorker(client);
-    QThread *thread = new QThread;
-    QObject::connect(thread, SIGNAL(started()), worker, SLOT(run()));
-
-    thread->start();
     mainWindow->resize(900, 600);
     mainWindow->show();
     int ret = app.exec();
