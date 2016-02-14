@@ -27,8 +27,6 @@ private:
     QIODevice *input;   // Provided by QAudioInput
     QIODevice *output;  // Provided by QAudioOutput
     QByteArray *loopbuffer;
-    OpusEncoder *encode;
-    OpusDecoder *decode;
 };
 
 #endif // MAINWORKER_H
