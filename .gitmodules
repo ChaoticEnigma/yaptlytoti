@@ -1,0 +1,3 @@
+[submodule "web/public/wcDocker"]
+	path = web/public/wcDocker
+	url = https://github.com/WebCabin/wcDocker
