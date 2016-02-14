@@ -3,141 +3,86 @@
 html {
     min-width: @minimumWidth;
 }
-html,body {
-    height:100%;
+
+html, body {
+    height: 100%;
 }
-#container {
-    height: 100vh;
-}
-#divider {
-    left: 33.3%;
-    width: 5px;
-    background: #ddd;
-}
-#channel-divider {
-    top: 50%;
-    height: 5px;
-    background: #ddd;
-}
-#pane-left {
+
+#pane-user {
+    flex: 1;
     display: flex;
-    flex-direction: column;
-    width: 33.33333333%;
-
-    #channels {
-        flex: 3;
-        display: flex;
-        flex-direction: column;
-        overflow: auto;
-
-        #channel-chat {
-            height: 50%;
-            padding: 15px 15px 0;
-
-            ul {
-                overflow: auto;
-                // 15px for padding, 20px for p tag
-                height: calc(~"100% - 15px - 20px");
-                margin: 0;
-            }
-        }
-
-        #channel-voice {
-            // pane resizeing
-            top: 50%;
-            padding: 15px 15px 0;
-
-            ul {
-                overflow: auto;
-                // 15px for padding, 20px for p tag
-                height: calc(~"100% - 15px - 20px");
-                margin: 0;
-            }
-        }
-    }
-
-    #pane-user {
-        flex: 1;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px;
-    }
-}
-#pane-right {
-    display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     padding: 15px;
-    // pane resizing
-    left: 33.33333333%;
 
-    #server-header {
+    #pane-user-right {
         display: flex;
         flex-direction: column;
-
-        #server-top {
-            display: flex;
-
-            #server-left-pane {
-                flex: 3;
-            }
-
-            #server-right-pane {
-                flex: 1;
-                display: flex;
-                align-items: center;
-                justify-content: space-around;
-            }
-        }
-
-        #server-bottom {
-            display: flex;
-
-            #server-tabs {
-                flex: 1;
-            }
-        }
     }
+}
 
-    #chat {
-        flex: 1;
+#server-header {
+    display: flex;
+    flex-direction: column;
+
+    #server-top {
         display: flex;
-        flex-direction: column;
-        overflow: auto;
+        #server-left-pane {
+            flex: 3;
+        }
 
-        #chat-top {
+        #server-right-pane {
             flex: 1;
             display: flex;
-            flex-direction: column;
-            overflow: auto;
+            align-items: center;
+            justify-content: space-around;
+        }
+    }
 
-            #chat-text-wrap {
-                flex: 1;
-                display: flex;
-                align-items: flex-end;
+    #server-bottom {
+        display: flex;
 
-                #chat-text-container {
-                    // TODO fix auto scroll to bottom to remove this?
-                    margin-bottom: 15px;
-                }
+        #server-tabs {
+            flex: 1;
+        }
+    }
+}
+
+#chat {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    #chat-top {
+        flex: 1;
+        overflow: auto;
+
+        #chat-text-wrap {
+            display: flex;
+            align-items: flex-end;
+
+            #chat-text-container {
+                margin-bottom: 15px;
             }
         }
     }
 }
+
 .faded {
-    opacity: 0.5;
-}
-.faded:hover {
-    opacity: 1;
+    opacity: .5;
+    &:hover {
+        opacity: 1;
+    }
 }
 .fixed-table {
     width: 100%;
     table-layout: fixed;
-}
-.fixed-table td {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+
+    td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 .none {
     display: none;
@@ -146,17 +91,32 @@ html,body {
     min-width: @minimumWidth;
 }
 .space-between {
-    display: -webkit-box; /* fallback for apple webkit */
+    display: -webkit-box;
     display: flex;
     justify-content: space-between;
 }
 .no-select {
-    -webkit-touch-callout:none;
-    -webkit-user-select:none;
-    -khtml-user-select:none;
-    -moz-user-select:none;
-    -ms-user-select:none;
-    user-select:none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+input[type="text"], input[type="password"] {
+    width: 100%;
+}
+
+// hack to get my internal scroll bars to work
+.wcLayout, .wcLayout tr, .wcLayout td, tbody {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+}
+
+#container {
+    // setting this seems to break init height values with wcDocker
+    position: relative;
 }
 
 // "mobile"

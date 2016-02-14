@@ -8,15 +8,42 @@ html
         link(rel='shortcut icon', href='/img/favicon.png', type='image/x-icon')
         link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
         link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css')
-        link(rel='stylesheet', href='/split-pane/split-pane.css')
+        link(rel='stylesheet', href='/wcDocker/Build/wcDocker.min.css')
         link(rel='stylesheet', href='/css/style.css')
-        link#theme(rel='stylesheet')
         script(src='https://code.jquery.com/jquery-2.2.0.min.js')
         script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
         script(src='https://cdn.socket.io/socket.io-1.4.5.js')
-        script(src='/split-pane/split-pane.min.js')
-        script(src='/js/client.js' async)
+        script(src='/wcDocker/Build/wcDocker.min.js')
+        script(src='/js/client.js', async='')
     body
+        #modal-about.modal.fade(tabindex='-1')
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        button.close(data-dismiss='modal')
+                            span ×
+                        h4.modal-title #{pack.name} - #{pack.version}
+                    .modal-body
+                        h4 Libraries used in #{pack.name}
+                        p
+                            a(href='https://jquery.com/', target='_blank') jQuery
+                            |    - Javascript framework
+                        p
+                            a(href='http://docker.api.webcabin.org/index.html', target='_blank') wcDocker
+                            |    - Docking interface framework
+                        p
+                            a(href='http://getbootstrap.com/', target='_blank') Bootstrap
+                            |    - Interface framework
+                        p
+                            a(href='https://fortawesome.github.io/Font-Awesome/', target='_blank') Font Awesome
+                            |    - Icons
+                        h4 License of #{pack.name}
+                        p #{pack.license}
+                        p
+                            a(href='https://github.com/ChaoticCrux/yaptlytoti', target='_blank') https://github.com/ChaoticCrux/yaptlytoti
+                    .modal-footer
+                        button(data-dismiss='modal') Close
+
         #modal-server-info.modal.fade(tabindex='-1')
             .modal-dialog
                 .modal-content
@@ -26,8 +53,7 @@ html
                         h4.modal-title Server information
                     .modal-body
                     .modal-footer
-                        button.btn.btn-default(data-dismiss='modal') Close
-
+                        button(data-dismiss='modal') Close
         #modal-server-settings.modal.fade(tabindex='-1')
             .modal-dialog
                 .modal-content
@@ -37,8 +63,7 @@ html
                         h4.modal-title Server settings
                     .modal-body
                     .modal-footer
-                        button.btn.btn-default(data-dismiss='modal') Close
-
+                        button(data-dismiss='modal') Close
         #modal-server-join.modal.fade(tabindex='-1')
             .modal-dialog
                 .modal-content
@@ -47,12 +72,11 @@ html
                             span ×
                         h4.modal-title Join server
                     .modal-body
-                        input#server-id.form-control(type='text', placeholder='Server address or url', autofocus)
-                        input#server-password.form-control(type='password', placeholder='Server password')
+                        input#server-id(type='text', placeholder='Server address or url', autofocus='')
+                        input#server-password(type='password', placeholder='Server password')
                     .modal-footer
-                        button.btn.btn-default(data-dismiss='modal') Close
-                        button#server-confirm.btn.btn-primary(data-dismiss='modal') Join
-
+                        button(data-dismiss='modal') Close
+                        button#server-confirm(data-dismiss='modal') Join
         #modal-user-settings.modal.fade(tabindex='-1')
             .modal-dialog
                 .modal-content
@@ -62,60 +86,110 @@ html
                         h4.modal-title User settings
                     .modal-body
                     .modal-footer
-                        button.btn.btn-default(data-dismiss='modal') Close
+                        button(data-dismiss='modal') Close
+        nav#menubar.navbar.navbar-default
+            .container
+                .navbar-header
+                    button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#menubar-collapse', aria-expanded='false', aria-controls='navbar')
+                        span.sr-only Toggle navigation
+                        span.icon-bar
+                        span.icon-bar
+                        span.icon-bar
+                    a.navbar-brand(href='#') YAP
+                #menubar-collapse.navbar-collapse.collapse
+                    ul.nav.navbar-nav
+                        li.dropdown
+                            a.dropdown-toggle(href='#', data-toggle='dropdown') Connection
+                            ul.dropdown-menu
+                                li
+                                    a(href='#', data-toggle='modal', data-target='#modal-server-join') Connect
+                                li
+                                    a(href='#') Disconnect from current
+                                li
+                                    a(href='#') View server list
+                        li.dropdown
+                            a.dropdown-toggle(href='#', data-toggle='dropdown') View
+                            ul.dropdown-menu
+                                li
+                                    a#reset-layout(href='#', title='Resets the interface back to normal') Reset interface
+                                li
+                                    a#save-layout(href='#', title='Saves the interface for the next time the page is refreshed.') Save interface
+                                li
+                                    a(href='#')
+                                        input#view-chat-channel(type='checkbox')
+                                        label(for='view-chat-channel') Chat channel
+                                li
+                                    a(href='#')
+                                        input#view-voice-channel(type='checkbox')
+                                        label(for='view-voice-channel') Voice channel
+                                li
+                                    a(href='#')
+                                        input#view-user-panel(type='checkbox')
+                                        label(for='view-user-panel') User Panel
+                        li.dropdown
+                            a.dropdown-toggle(href='#', data-toggle='dropdown') Settings
+                            ul.dropdown-menu
+                                li
+                                    a(href='#', data-toggle='modal', data-target='#modal-server-settings') Server settings
+                                li
+                                    a(href='#', data-toggle='modal', data-target='#modal-user-settings') Client settings
+                        li.dropdown
+                            a.dropdown-toggle(href='#', data-toggle='dropdown') Help
+                            ul.dropdown-menu
+                                li
+                                    a(href='#', data-toggle='modal', data-target='#modal-about') About
+                                li
+                                    a(href='#') Tips and Tricks
+        #container
+        // wcDocker requires html to be in js if using the restore layout feature http://html2jade.org/
 
-        #container.split-pane.fixed-left
+        //-#channels
+            #channel-chat.split-pane-component
+                p Chat channels
+                ul
+            #channel-divider.split-pane-divider
+            #channel-voice.split-pane-component
+                p Voice channels
+                ul
+        //-#pane-user
+            #user-picture
+                p IMG
+            #user-name
+                p User name
+            #user-pane-right
+                #user-mute
+                    button#server-info.btn.btn-default(title='Mute microphone')
+                        i.fa.fa-fw.fa-microphone
+                #user-deaf
+                    button#server-info.btn.btn-default(title='Mute speakers')
+                        i.fa.fa-fw.fa-volume-up
+                #user-settings
+                    button#server-settings.btn.btn-default(title='Edit user settings', data-toggle='modal', data-target='#modal-user-settings')
+                        i.fa.fa-fw.fa-gear
 
-            #pane-left.split-pane-component
-                #channels.split-pane.fixed-top
-                    #channel-chat.split-pane-component
-                        p Chat channels
-                        ul
-                    #channel-divider.split-pane-divider
-                    #channel-voice.split-pane-component
-                        p Voice channels
-                        ul
-                #pane-user
-                    #user-picture
-                        p IMG
-                    #user-name
-                        p User name
-                    #user-pane-right
-                        #user-mute
-                            button#server-info.btn.btn-default(title='Mute microphone')
-                                i.fa.fa-fw.fa-microphone
-                        #user-deaf
-                            button#server-info.btn.btn-default(title='Mute speakers')
-                                i.fa.fa-fw.fa-volume-up
-                        #user-settings
-                            button#server-settings.btn.btn-default(title='Edit user settings', data-toggle='modal', data-target='#modal-user-settings')
-                                i.fa.fa-fw.fa-gear
-
-            #divider.split-pane-divider
-            #pane-right.split-pane-component
-                #server-header
-                    #server-top
-                        #server-left-pane
-                            #server-title
-                                p Server title
-                            #server-description
-                                p Server description
-                            #server-icon
-                        #server-right-pane
-                            button#server-settings.btn.btn-default(title='Edit server settings', data-toggle='modal', data-target='#modal-server-settings')
-                                i.fa.fa-fw.fa-gear
-                            button#server-info.btn.btn-default(title='View server information', data-toggle='modal', data-target='#modal-server-info')
-                                i.fa.fa-fw.fa-info-circle
-                            #server-icon
-                    #server-bottom
-                        ul#server-tabs.nav.nav-tabs
-                        button#server-join-btn.btn.btn-default(title='Join a server', data-toggle='modal', data-target='#modal-server-join')
-                            i.fa.fa-fw.fa-plus
-                #chat
-                    #channel-name-current.text-center
-                        p Channel name
-                    #chat-top
-                        #chat-text-wrap
-                            #chat-text-container
-                    #chat-bottom
-                        input#chat-box-input.form-control(type='text', placeholder='Enter text for <channel name>')
+        //-#server-header
+            #server-top
+                #server-left-pane
+                    #server-title
+                        p Server title
+                    #server-description
+                        p Server description
+                    #server-icon
+                #server-right-pane
+                    button#server-settings.btn.btn-default(title='Edit server settings', data-toggle='modal', data-target='#modal-server-settings')
+                        i.fa.fa-fw.fa-gear
+                    button#server-info.btn.btn-default(title='View server information', data-toggle='modal', data-target='#modal-server-info')
+                        i.fa.fa-fw.fa-info-circle
+                    #server-icon
+            #server-bottom
+                ul#server-tabs.nav.nav-tabs
+                button#server-join-btn.btn.btn-default(title='Join a server', data-toggle='modal', data-target='#modal-server-join')
+                    i.fa.fa-fw.fa-plus
+        //-#chat
+            #channel-name-current.text-center
+                p Channel name
+            #chat-top
+                #chat-text-wrap
+                    #chat-text-container
+            #chat-bottom
+                input#chat-box-input.form-control(type='text', placeholder='Enter text for <channel name>')
