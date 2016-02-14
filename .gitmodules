@@ -1,3 +1,0 @@
-[submodule "web/public/split-pane"]
-	path = web/public/split-pane
-	url = https://github.com/shagstrom/split-pane
