@@ -1,3 +1,3 @@
-[submodule "web/public/split-pane"]
-	path = web/public/split-pane
-	url = https://github.com/shagstrom/split-pane
+[submodule "web/public/wcDocker"]
+	path = web/public/wcDocker
+	url = https://github.com/WebCabin/wcDocker
