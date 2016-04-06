@@ -59,7 +59,8 @@ void AudioWorker::inputRead(){
     input->read(loopbuffer->data(), len);
 
     QByteArray odata(INPUT_BUFFER, 0);
-    opus_int32 olen = opus_encode(encode, (opus_int16 *)loopbuffer->data(), 0, (unsigned char *)odata.data(), INPUT_BUFFER);
+    // Encode
+    //opus_int32 olen = opus_encode(encode, (opus_int16 *)loopbuffer->data(), 0, (unsigned char *)odata.data(), INPUT_BUFFER);
 
     output->write(loopbuffer->data());
 

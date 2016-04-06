@@ -51,6 +51,8 @@ SET(YapD_SOURCES
 SET(VoIP_SOURCES
     voip/codec.h
     voip/codec.cpp
+    voip/opuscodec.h
+    voip/opuscodec.cpp
     voip/network.h
     voip/network.cpp
     voip/voip.h
