@@ -29,6 +29,8 @@ SET(Yap_SOURCES
 
     client/audiosystem.h
     client/audiosystem.cpp
+    client/inputreceiver.h
+    client/inputreceiver.cpp
 
     client/settingsdialog.h
     client/settingsdialog.cpp

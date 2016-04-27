@@ -9,7 +9,7 @@ using namespace LibChaos;
 
 #define DEFAULT_CHANNELS        1
 #define SAMPLE_SIZE             16
-#define DEFAULT_SAMPLE_RATE     48000
+#define DEFAULT_SAMPLE_RATE     16000
 
 #define DEFAULT_ENCODE_BUFFER   4000
 #define DEFAULT_DECODE_BUFFER   4000

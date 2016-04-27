@@ -65,21 +65,18 @@ void AudioSystem::playAudio(const AudioData *data){
 
     const qint16 *ptr = data->data();
     qint64 size = data->size() * 2;
-    while(true){
-        // Wait for device to finish writing
-        outputDevice->waitForBytesWritten(-1);
+    // Wait for device to finish writing
+    //outputDevice->waitForBytesWritten(-1);
 
-        // Write PCM data (signed 16-bit int) as bytes
-        qint64 bytes = outputDevice->write((const char *)ptr, size);
-        if(bytes < 0){
-            qCritical() << "Error writing to IO device";
-        } else if(bytes < size){
-            qWarning() << "Write underrun";
-            ptr += bytes / 2;
-            size -= bytes;
-            continue;
-        }
-        break;
+    // Write PCM data (signed 16-bit int) as bytes
+    qint64 bytes = outputDevice->write((const char *)ptr, size);
+    if(bytes < 0){
+        qCritical() << "Error writing to IO device";
+    } else if(bytes < size){
+        qWarning() << "Write underrun";
+        //ptr += bytes / 2;
+        //size -= bytes;
+        //continue;
     }
     delete data;
 }
