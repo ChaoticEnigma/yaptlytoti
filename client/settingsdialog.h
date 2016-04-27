@@ -17,7 +17,14 @@ public:
 
 private slots:
     void inputDeviceChanged(int idx);
-    void outputDeviceChanged(int);
+    void outputDeviceChanged(int idx);
+    void captureCodecChanged(QString text);
+    void netPortChanged(QString text);
+
+signals:
+    void inputDeviceChange();
+    void outputDeviceChange();
+    void captureCodecChange();
 
 private:
     Client *client;

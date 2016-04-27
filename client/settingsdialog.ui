@@ -48,6 +48,39 @@
      <item row="1" column="1">
       <widget class="QComboBox" name="outputDeviceComboBox"/>
      </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="captureCodecLabel">
+       <property name="text">
+        <string>Capture Codec:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="captureCodecComboBox">
+       <item>
+        <property name="text">
+         <string>Opus</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="netPortLabel">
+       <property name="text">
+        <string>Port:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="netPortLineEdit">
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
