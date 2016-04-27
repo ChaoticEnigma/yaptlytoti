@@ -15,19 +15,27 @@ void Network::init(zu16 port){
 }
 
 void Network::sendMessage(VoIPMessage *message){
-    QByteArray datagram = message->getData();
-    socket->writeDatagram(datagram, message->host(), message->port());
+    // Send datagram
+    ZBinary data = message->getData();
+    qint64 len = socket->writeDatagram((char *)data.raw(), data.size(), message->getHost(), message->getPort());
+    if(len != data.size()){
+        qCritical() << "Failed to write all of datagram";
+    }
     delete message;
 }
 
 void Network::readPending(){
     while(socket->hasPendingDatagrams()){
-        QByteArray datagram;
-        datagram.resize(socket->pendingDatagramSize());
-        QHostAddress sender;
-        quint16 sport;
-        socket->readDatagram(datagram.data(), datagram.size(), &sender, &sport);
-
-        voip->decodeMessage(new VoIPMessage(datagram, sender, sport));
+        QHostAddress host;
+        quint16 port;
+        ZBinary datagram(socket->pendingDatagramSize());
+        // Receive datagram
+        qint64 len = socket->readDatagram((char *)datagram.raw(), datagram.size(), &host, &port);
+        if(len != datagram.size()){
+            qCritical() << "Failed to read all of datagram";
+            //return;
+        }
+        // Process message
+        voip->decodeMessage(new VoIPMessage(host, port, datagram));
     }
 }

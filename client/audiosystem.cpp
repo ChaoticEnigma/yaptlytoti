@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QBuffer>
 
-#define INPUT_BUFFER 40000
+#define INPUT_BUFFER 4000
 
 AudioSystem::AudioSystem(Client *aclient, QObject *parent) :
         QObject(parent),
@@ -37,27 +37,49 @@ void AudioSystem::initOutput(){
 }
 
 void AudioSystem::inputRead(){
-    int len = client->audioInput->bytesReady();
+    int samples = client->audioInput->bytesReady() / 2;
     // Limit read to buffer size
-    if(len > INPUT_BUFFER)
-        len = INPUT_BUFFER;
-    len = client->voip->codec()->checkReadAvailBytes(len / 2);
-    // Do nothing if len is 0
-    if(!len)
+    if(samples > INPUT_BUFFER)
+        samples = INPUT_BUFFER;
+    // Limit read to correct frame size
+    samples = client->voip->codec()->checkReadSampleCount(samples);
+    // Do nothing if size is 0
+    if(!samples)
         return;
 
-    // Read PCM data
-    inputDevice->read((char *)loopbuffer->data(), len * 2);
-    //qDebug() << "Rec" << len;
+    // Read PCM data (signed 16-bit int) as bytes
+    qint64 bytes = inputDevice->read((char *)loopbuffer->data(), samples * 2);
+    if(bytes < 0){
+        qCritical() << "Error reading from IO device";
+    } else if(bytes < samples * 2){
+        qWarning() << "Read underrun";
+    }
+    qDebug() << "Rec" << samples;
 
     // Send to libvoip
-    client->voip->sendAudio(loopbuffer, len);
+    client->voip->sendAudio(loopbuffer, samples);
 }
 
 void AudioSystem::playAudio(const AudioData *data){
-    //qDebug() << "Play" << data->size();
-    // Write PCM data
-    while(outputDevice->bytesToWrite());
-    outputDevice->write((const char *)data->data(), data->size() * 2);
+    qDebug() << "Play" << data->size();
+
+    const qint16 *ptr = data->data();
+    qint64 size = data->size() * 2;
+    while(true){
+        // Wait for device to finish writing
+        outputDevice->waitForBytesWritten(-1);
+
+        // Write PCM data (signed 16-bit int) as bytes
+        qint64 bytes = outputDevice->write((const char *)ptr, size);
+        if(bytes < 0){
+            qCritical() << "Error writing to IO device";
+        } else if(bytes < size){
+            qWarning() << "Write underrun";
+            ptr += bytes / 2;
+            size -= bytes;
+            continue;
+        }
+        break;
+    }
     delete data;
 }

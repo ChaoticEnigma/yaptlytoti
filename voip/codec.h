@@ -1,15 +1,20 @@
 #ifndef CODEC_H
 #define CODEC_H
 
-#include <QByteArray>
+#include <QVector>
+#include "zbinary.h"
 #include "opus/opus.h"
 
-#define DEFAULT_CHANNELS    1
-#define SAMPLE_SIZE 16
-#define DEFAULT_SAMPLE_RATE 16000
+using namespace LibChaos;
 
-#define DEFAULT_ENCODE_BUFFER 4000
-#define DEFAULT_DECODE_BUFFER 4000
+#define DEFAULT_CHANNELS        1
+#define SAMPLE_SIZE             16
+#define DEFAULT_SAMPLE_RATE     48000
+
+#define DEFAULT_ENCODE_BUFFER   4000
+#define DEFAULT_DECODE_BUFFER   4000
+
+// https://wiki.xiph.org/OpusFAQ
 
 typedef QVector<qint16> AudioData;
 
@@ -22,9 +27,9 @@ public:
 public:
     Codec(CodecType type);
 
-    void encode(const AudioData *indata, int frame_size, QByteArray &outdata);
-    void decode(const QByteArray &indata, AudioData *outdata);
-    int checkReadAvailBytes(int avail);
+    void encode(const AudioData *indata, int frame_size, ZBinary &outdata);
+    void decode(const ZBinary &indata, AudioData *outdata);
+    int checkReadSampleCount(int avail);
 
 private:
     int rate;

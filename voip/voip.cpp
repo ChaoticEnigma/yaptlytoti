@@ -11,18 +11,20 @@ VoIP::~VoIP(){
 
 void VoIP::sendAudio(const AudioData *data, int length){
     //qDebug() << "Send" << length;
-    QByteArray outdata;
+    ZBinary outdata;
     audiocodec->encode(data, length, outdata);
     //qDebug() << "Encoded:" << outdata.size();
-    network->sendMessage(new VoIPMessage(outdata, QHostAddress::LocalHost, 7777));
+    VoIPMessage *message = new VoIPMessage(QHostAddress::LocalHost, 7777);
+    message->setType(VoIPMessage::TYPE_AUDIO_OPUS);
+    message->payload().write(outdata.raw(), outdata.size());
+    network->sendMessage(message);
 }
 
 void VoIP::decodeMessage(VoIPMessage *message){
-    qDebug() << "Recv:" << message->host() << message->port() << message->getData().size();
-    QByteArray data = message->getData();
-    delete message;
+    qDebug() << "Recv:" << message->getHost() << message->getPort() << message->payload().size();
     AudioData *outdata = new AudioData;
-    audiocodec->decode(data, outdata);
+    audiocodec->decode(message->payload(), outdata);
+    delete message;
     //qDebug() << "Decoded:" << outdata->size();
     emit decodedAudio(outdata);
 }
