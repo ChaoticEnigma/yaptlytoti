@@ -1,7 +1,7 @@
 #include "client.h"
 #include "mainwindow.h"
 #include "settingsdialog.h"
-#include "audioworker.h"
+#include "audiosystem.h"
 #include <QApplication>
 #include <QThread>
 
@@ -14,25 +14,24 @@ int main(int argc, char **argv){
     QApplication app(argc, argv);
     Q_INIT_RESOURCE(mainwindow);
 
+    // Create windows
     MainWindow *mainWindow = new MainWindow(client);
 
-    AudioWorker *worker = new AudioWorker(client);
-    client->audioworker = worker;
-    QThread *thread = new QThread;
-    QObject::connect(thread, SIGNAL(started()), worker, SLOT(run()));
-    thread->start();
+    // Create audio I/O controller
+    client->audiosystem = new AudioSystem(client);
 
+    // Create codec/network controller
+    client->voip = new VoIP();
+
+    // Create settings dialog, triggers audio setup
     client->settingsDialog = new SettingsDialog(client, mainWindow);
-    mainWindow->init();
 
+    // Show window
+    mainWindow->init();
     mainWindow->resize(900, 600);
     mainWindow->show();
     int ret = app.exec();
     mainWindow->hide();
-    thread->quit();
-
-    delete thread;
-    delete worker;
 
     delete mainWindow;
     delete client;

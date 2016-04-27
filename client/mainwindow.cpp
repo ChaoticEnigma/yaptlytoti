@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include <QtWidgets>
 
-MainWindow::MainWindow(Client *client, QWidget *parent) : QMainWindow(parent), client(client){
+MainWindow::MainWindow(Client *aclient, QWidget *parent) : QMainWindow(parent), client(aclient){
 
     chatframe = new QWidget();
     chatboxlayout = new QBoxLayout(QBoxLayout::TopToBottom, chatframe);

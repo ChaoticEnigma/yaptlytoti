@@ -7,22 +7,15 @@ OPTION(YAP_CLIENT "Build YapTlyToti Client" ON)
 OPTION(YAP_SERVER "Build YapTlyToti Server" OFF)
 
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
-#SET(CMAKE_AUTOMOC ON)
+SET(CMAKE_AUTOMOC ON)
 SET(CMAKE_AUTORCC ON)
 
 ADD_SUBDIRECTORY(libchaos)
-
-# Set OPUS_LIBRARY and OPUS_INCLUDE_DIR
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR})
-FIND_PACKAGE(Opus REQUIRED)
-IF(NOT OPUS_FOUND)
-    MESSAGE(FATAL_ERROR "YapTlyToti requires libopus. Set OPUS_LIBRARY and OPUS_INCLUDE_DIR.")
-ENDIF()
+ADD_SUBDIRECTORY(voip)
 
 IF(YAP_CLIENT)
     FIND_PACKAGE(Qt5Widgets 5.5 REQUIRED)
     FIND_PACKAGE(Qt5Multimedia 5.5 REQUIRED)
-    FIND_PACKAGE(Qt5Network 5.5 REQUIRED)
 ENDIF()
 
 ### =================== SOURCES =================== ###
@@ -34,8 +27,8 @@ SET(Yap_SOURCES
     client/mainwindow.cpp
     client/mainwindowslots.cpp
 
-    client/audioworker.h
-    client/audioworker.cpp
+    client/audiosystem.h
+    client/audiosystem.cpp
 
     client/settingsdialog.h
     client/settingsdialog.cpp
@@ -46,15 +39,6 @@ SET(YapD_SOURCES
 
     server/server.h
     server/server.cpp
-)
-
-SET(VoIP_SOURCES
-    voip/codec.h
-    voip/codec.cpp
-    voip/network.h
-    voip/network.cpp
-    voip/voip.h
-    voip/voip.cpp
 )
 
 ### =================== FORMS ===================== ###
@@ -81,24 +65,19 @@ ADD_CUSTOM_TARGET(dummy SOURCES
 
 INCLUDE_DIRECTORIES(
     ${CMAKE_BINARY_DIR}
+    voip
     ${LibChaos_INCLUDE}
     ${Qt5Widgets_INCLUDE_DIRS}
     ${Qt5Multimedia_INCLUDE_DIRS}
-    ${Qt5Network_INCLUDE_DIRS}
-    ${OPUS_INCLUDE_DIRS}
 )
-
-MESSAGE(STATUS "libopus: ${OPUS_LIBRARIES}")
 
 IF(YAP_CLIENT)
     ADD_DEFINITIONS(${QT_DEFINITIONS})
     #SET(CMAKE_PREFIX_PATH "${QTDIR}; ${WINSDK_LIB}")
     GET_TARGET_PROPERTY(QtWidgets_LOCATION Qt5::Widgets LOCATION)
     GET_TARGET_PROPERTY(QtMultimedia_LOCATION Qt5::Multimedia LOCATION)
-    GET_TARGET_PROPERTY(QtNetwork_LOCATION Qt5::Network LOCATION)
     MESSAGE(STATUS "Qt5Widgets: ${QtWidgets_LOCATION}")
     MESSAGE(STATUS "Qt5Multimedia: ${QtMultimedia_LOCATION}")
-    MESSAGE(STATUS "Qt5Network: ${QtNetwork_LOCATION}")
 
     SET(CLIENT_ALL)
 ELSE()
@@ -111,21 +90,15 @@ ELSE()
     SET(SERVER_ALL EXCLUDE_FROM_ALL)
 ENDIF()
 
-#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-MESSAGE(STATUS ${LibChaos_CXX_FLAGS})
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LibChaos_CXX_FLAGS}")
 ADD_DEFINITIONS(-DBUILDING)
 
 ### =================== BUILD =================== ###
 
-# VoIP Library
-ADD_LIBRARY(voip STATIC ${VoIP_SOURCES})
-TARGET_LINK_LIBRARIES(voip chaos Qt5::Network)
-
 # Client
 qt5_wrap_ui(Forms_SOURCES ${Yap_FORMS})
 ADD_EXECUTABLE(yap ${CLIENT_ALL} ${Yap_SOURCES} ${Forms_SOURCES} ${Yap_RESOURCES})
-TARGET_LINK_LIBRARIES(yap voip Qt5::Widgets Qt5::Multimedia ${OPUS_LIBRARIES})
+TARGET_LINK_LIBRARIES(yap voip Qt5::Widgets Qt5::Multimedia)
 
 # Server
 ADD_EXECUTABLE(yapd ${SERVER_ALL} ${YapD_SOURCES})
