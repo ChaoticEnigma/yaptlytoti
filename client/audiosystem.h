@@ -2,11 +2,10 @@
 #define MAINWORKER_H
 
 #include "client.h"
+#include "inputreceiver.h"
 #include <QObject>
 #include <QByteArray>
 #include <QBuffer>
-
-#include "opus/opus.h"
 
 class AudioSystem : public QObject {
     Q_OBJECT
@@ -19,13 +18,15 @@ public:
 
 public slots:
     void inputRead();
-    void playAudio(const AudioData *data);
+    void playAudio(const ZArray<zs16> *data);
 
 private:
     Client *client;
     QIODevice *inputDevice;     // Provided by QAudioInput
     QIODevice *outputDevice;    // Provided by QAudioOutput
-    AudioData *loopbuffer;
+    ZArray<zs16> *loopbuffer;
+    InputReceiver *receiver;
+
 };
 
 #endif // MAINWORKER_H

@@ -11,8 +11,6 @@ public:
     VoIP();
     ~VoIP();
 
-    void sendAudio(const AudioData *data, int length);
-
     // Network message received callback
     void decodeMessage(VoIPMessage *message);
 
@@ -21,8 +19,11 @@ public:
 
     Codec *codec(){ return audiocodec; }
 
+public slots:
+    void inputPCM(const ZArray<zs16> *data);
+
 signals:
-    void decodedAudio(const AudioData *data);
+    void decodedAudio(const ZArray<zs16> *data);
 
 private:
     Codec *audiocodec;

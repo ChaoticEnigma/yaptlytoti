@@ -22,6 +22,9 @@ public:
     zu8 getType() const { return messageType; }
     void setType(zu8 type){ messageType = type; }
 
+    zu32 getSeq() const { return sequence; }
+    void setSeq(zu32 seq){ sequence = seq; }
+
     ZBinary &payload(){ return messageData; }
 
     ZBinary getData() const;
@@ -29,6 +32,7 @@ public:
 private:
     QHostAddress hostAddr;
     quint16 hostPort;
+    zu32 sequence;
     zu8 messageType;
     ZBinary messageData;
 };

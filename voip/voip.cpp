@@ -9,20 +9,22 @@ VoIP::~VoIP(){
     delete network;
 }
 
-void VoIP::sendAudio(const AudioData *data, int length){
+void VoIP::inputPCM(const ZArray<zs16> *data){
     //qDebug() << "Send" << length;
     ZBinary outdata;
-    audiocodec->encode(data, length, outdata);
-    //qDebug() << "Encoded:" << outdata.size();
-    VoIPMessage *message = new VoIPMessage(QHostAddress::LocalHost, 7777);
-    message->setType(VoIPMessage::TYPE_AUDIO_OPUS);
-    message->payload().write(outdata.raw(), outdata.size());
-    network->sendMessage(message);
+    zu64 len = audiocodec->encode(data, outdata);
+    if(len){
+        //qDebug() << "Encoded:" << outdata.size();
+        VoIPMessage *message = new VoIPMessage(QHostAddress::LocalHost, 7777);
+        message->setType(VoIPMessage::TYPE_AUDIO_OPUS);
+        message->payload().write(outdata.raw(), outdata.size());
+        network->sendMessage(message);
+    }
 }
 
 void VoIP::decodeMessage(VoIPMessage *message){
-    qDebug() << "Recv:" << message->getHost() << message->getPort() << message->payload().size();
-    AudioData *outdata = new AudioData;
+    qDebug() << "Recv" << message->getSeq() << message->getHost() << message->getPort() << message->payload().size();
+    ZArray<zs16> *outdata = new ZArray<zs16>;
     audiocodec->decode(message->payload(), outdata);
     delete message;
     //qDebug() << "Decoded:" << outdata->size();

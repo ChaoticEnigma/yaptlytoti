@@ -34,32 +34,42 @@ Codec::Codec(CodecType type) : rate(DEFAULT_SAMPLE_RATE), encoder(nullptr), deco
 
 }
 
-void Codec::encode(const AudioData *indata, int frame_size, ZBinary &outdata){
-    outdata.resize(DEFAULT_ENCODE_BUFFER);
-    opus_int32 bytes = opus_encode(encoder, indata->data(), frame_size, outdata.raw(), DEFAULT_ENCODE_BUFFER);
-    if(bytes < 0){
-        // error
-        qCritical() << "Faied to encode opus:" << opus_strerror(bytes);
-    } else {
-        //qDebug() << "Encoded Bytes:" << bytes;
-        outdata.resize(bytes);
+zu64 Codec::encode(const ZArray<zs16> *samples, ZBinary &outdata){
+    samplebuffer.append(*samples);
+    delete samples;
+    int count = checkReadSampleCount(samplebuffer.size());
+    //qDebug() << "Encode Samples" << count;
+    if(count){
+        outdata.resize(DEFAULT_ENCODE_BUFFER);
+        opus_int32 bytes = opus_encode(encoder, samplebuffer.raw(), count, outdata.raw(), DEFAULT_ENCODE_BUFFER);
+        if(bytes < 0){
+            // error
+            qCritical() << "Faied to encode opus:" << opus_strerror(bytes);
+        } else {
+            //qDebug() << "Encoded Bytes " << bytes;
+            outdata.resize(bytes);
+        }
+        samplebuffer.erase(0, count);
+        return bytes;
     }
+    return 0;
 }
 
-void Codec::decode(const ZBinary &indata, AudioData *outdata){
+void Codec::decode(const ZBinary &indata, ZArray<zs16> *outdata){
     outdata->resize(DEFAULT_DECODE_BUFFER);
     const zbyte *dptr = (indata.size() == 0 ? nullptr : indata.raw());
-    int samples = opus_decode(decoder, dptr, indata.size(), outdata->data(), DEFAULT_DECODE_BUFFER, 0);
+    //qDebug() << "Decode Bytes   " << indata.size();
+    int samples = opus_decode(decoder, dptr, indata.size(), outdata->raw(), DEFAULT_DECODE_BUFFER, 0);
     if(samples < 0){
         // error
         qCritical() << "Faied to decode opus:" << opus_strerror(samples);
     } else {
-        //qDebug() << "Decoded Samples:" << samples;
+        //qDebug() << "Decoded Samples" << samples;
         outdata->resize(samples);
     }
 }
 
-int Codec::checkReadSampleCount(int avail){
+int Codec::checkReadSampleCount(zu16 avail){
     if(avail >= rate * 60 / 1000)
         return (rate * 60) / 1000;
     if(avail >= rate * 40 / 1000)

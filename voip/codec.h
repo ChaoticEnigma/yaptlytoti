@@ -3,6 +3,7 @@
 
 #include <QVector>
 #include "zbinary.h"
+#include "zarray.h"
 #include "opus/opus.h"
 
 using namespace LibChaos;
@@ -16,8 +17,6 @@ using namespace LibChaos;
 
 // https://wiki.xiph.org/OpusFAQ
 
-typedef QVector<qint16> AudioData;
-
 class Codec {
 public:
     enum CodecType {
@@ -27,12 +26,13 @@ public:
 public:
     Codec(CodecType type);
 
-    void encode(const AudioData *indata, int frame_size, ZBinary &outdata);
-    void decode(const ZBinary &indata, AudioData *outdata);
-    int checkReadSampleCount(int avail);
+    zu64 encode(const ZArray<zs16> *samples, ZBinary &outdata);
+    void decode(const ZBinary &indata, ZArray<zs16> *outdata);
+    int checkReadSampleCount(zu16 avail);
 
 private:
     int rate;
+    ZArray<zs16> samplebuffer;
     OpusEncoder *encoder;
     OpusDecoder *decoder;
 };

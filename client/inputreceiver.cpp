@@ -1,7 +1,7 @@
 #include "inputreceiver.h"
 #include "codec.h"
 
-InputReceiver::InputReceiver(const QAudioFormat &format, QObject *parent) : QIODevice(parent), format(format){
+InputReceiver::InputReceiver(const QAudioFormat &aformat, VoIP *avoip, QObject *parent) : QIODevice(parent), format(aformat), voip(avoip){
 
 }
 
@@ -27,9 +27,10 @@ qint64 InputReceiver::writeData(const char *data, qint64 len){
     int numSamples = len / sampleBytes;
     const qint16 *ptr = reinterpret_cast<const qint16 *>(data);
 
-    AudioData sampledata;
-    sampledata.resize(numSamples);
-    memcpy(sampledata.data(), ptr, numSamples);
+    //qDebug() << "Read" << numSamples;
+
+    ZArray<zs16> *samples = new ZArray<zs16>(ptr, numSamples);
+    emit audioReady(samples);
 
     return len;
 }

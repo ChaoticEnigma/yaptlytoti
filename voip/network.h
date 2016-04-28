@@ -2,7 +2,7 @@
 #define NETWORK_H
 
 #include <QUdpSocket>
-#include "ztypes.h"
+#include "zqueue.h"
 #include "voipmessage.h"
 
 using namespace LibChaos;
@@ -25,6 +25,8 @@ private slots:
 private:
     VoIP *voip;
     QUdpSocket *socket;
+    ZQueue<VoIPMessage *> queue;
+    zu32 sendseq;
 };
 
 #endif // NETWORK_H
