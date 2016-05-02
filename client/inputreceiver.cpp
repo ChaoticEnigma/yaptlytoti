@@ -27,7 +27,7 @@ qint64 InputReceiver::writeData(const char *data, qint64 len){
     int numSamples = len / sampleBytes;
     const qint16 *ptr = reinterpret_cast<const qint16 *>(data);
 
-    //qDebug() << "Read" << numSamples;
+    //qDebug() << "Rec" << numSamples;
 
     ZArray<zs16> *samples = new ZArray<zs16>(ptr, numSamples);
     emit audioReady(samples);

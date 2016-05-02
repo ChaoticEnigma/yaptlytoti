@@ -18,6 +18,16 @@ Codec::Codec(CodecType type) : rate(DEFAULT_SAMPLE_RATE), encoder(nullptr), deco
             qCritical() << "Faied to set opus bitrate: " << opus_strerror(error);
             return;
         }
+        error = opus_encoder_ctl(encoder, OPUS_SET_INBAND_FEC(1));
+        if(error < 0){
+            qCritical() << "Faied to set opus bitrate: " << opus_strerror(error);
+            return;
+        }
+        error = opus_encoder_ctl(encoder, OPUS_SET_PACKET_LOSS_PERC(10));
+        if(error < 0){
+            qCritical() << "Faied to set opus bitrate: " << opus_strerror(error);
+            return;
+        }
 
         // Opus decoder
         decoder = opus_decoder_create(DEFAULT_SAMPLE_RATE, DEFAULT_CHANNELS, &error);

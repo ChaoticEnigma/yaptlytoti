@@ -7,6 +7,7 @@ using namespace LibChaos;
 
 class VoIPMessage {
 public:
+    //! VoIP message signature.
     static const zu32 MSGSIG = 0x77888877;
     static const zu8 TYPE_AUDIO_OPUS = 0x02;
 public:

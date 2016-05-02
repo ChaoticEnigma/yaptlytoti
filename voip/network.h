@@ -17,16 +17,23 @@ public:
 
     void init(zu16 port);
 
+public slots:
+    void start();
     void sendMessage(VoIPMessage *message);
+
+signals:
+    void receivedMessage(VoIPMessage *message);
 
 private slots:
     void readPending();
 
 private:
     VoIP *voip;
+    zu16 listenport;
     QUdpSocket *socket;
     ZQueue<VoIPMessage *> queue;
     zu32 sendseq;
+    zu32 recvseq;
 };
 
 #endif // NETWORK_H
