@@ -1,6 +1,7 @@
-[submodule "libchaos"]
-	path = libchaos
-	url = ssh://znnxs.com:89/git/libchaos.git
 [submodule "web/public/wcDocker"]
 	path = web/public/wcDocker
 	url = https://github.com/WebCabin/wcDocker
+[submodule "libchaos"]
+	path = libchaos
+	url = https://znnxs.com/git/libchaos.git
+	branch = yap-patches
