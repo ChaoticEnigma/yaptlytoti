@@ -49,3 +49,4 @@ If qt5.5 was installed manually (the path may be different), add this line as a 
 ## Alternate Names:
 YAV / YAVoIP (Yet Another VoIP)
 YAVC (Yet Another VoIP Client)
+
